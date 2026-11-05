@@ -80,6 +80,10 @@
                         <button type="button" class="btn-keypad btn-aux" id="btn-pin-back">⌫</button>
                     </div>
 
+                    <button type="button" class="btn-primary-action" id="btn-submit-kid-pin" style="width: 100%; margin-top: 0.5rem; margin-bottom: 0.75rem;">
+                        Unlock Vault 🚀
+                    </button>
+
                     <div class="pin-hint" id="pin-sample-hint">
                         💡 Default PIN for testing: <strong>1234</strong>
                     </div>
@@ -335,9 +339,9 @@
                 <button type="button" class="btn-modal-close" id="btn-close-parent-gate">✕</button>
             </div>
             <div class="modal-body" style="text-align: center;">
-                <p style="color: var(--text-muted); margin-bottom: 1rem;">Enter parent passcode (Default: 9999):</p>
+                <p style="color: var(--text-muted); margin-bottom: 0.75rem;">Enter 4-digit passcode or type on keyboard:</p>
                 
-                <div class="pin-display" id="parent-gate-dots">
+                <div class="pin-display" id="parent-gate-dots" style="cursor: pointer;" title="Type on keyboard or use keypad below">
                     <div class="pin-dot"></div>
                     <div class="pin-dot"></div>
                     <div class="pin-dot"></div>
@@ -357,6 +361,17 @@
                     <button type="button" class="btn-keypad btn-aux" id="btn-pgate-clear">C</button>
                     <button type="button" class="btn-keypad" data-pdigit="0">0</button>
                     <button type="button" class="btn-keypad btn-aux" id="btn-pgate-back">⌫</button>
+                </div>
+
+                <button type="button" class="btn-primary-action" id="btn-submit-parent-pin" style="width: 100%; margin-top: 0.75rem;">
+                    Unlock Parent Zone 🔑
+                </button>
+
+                <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; padding: 0 0.25rem;">
+                    <span style="color: var(--text-muted);">Passcode: <strong>9999</strong> or <strong>1234</strong></span>
+                    <button type="button" id="btn-quick-parent-demo" style="background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer; text-decoration: underline;">
+                        ⚡ Quick Demo Unlock
+                    </button>
                 </div>
             </div>
         </div>
@@ -535,3 +550,4 @@
     <script src="js/app.js"></script>
 </body>
 </html>
+

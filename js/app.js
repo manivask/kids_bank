@@ -72,6 +72,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         modalParentGate: document.getElementById('modal-parent-gate'),
         btnCloseParentGate: document.getElementById('btn-close-parent-gate'),
         parentGateDots: document.getElementById('parent-gate-dots'),
+        btnSubmitParentPin: document.getElementById('btn-submit-parent-pin'),
+        btnQuickParentDemo: document.getElementById('btn-quick-parent-demo'),
+        btnSubmitKidPin: document.getElementById('btn-submit-kid-pin'),
         
         modalSpend: document.getElementById('modal-spend'),
         formSpend: document.getElementById('form-spend'),
@@ -204,6 +207,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         switchView('login');
     });
 
+    function openParentPinModal() {
+        state.parentPinBuffer = '';
+        updatePinDots(el.parentGateDots, 0);
+        el.modalParentGate.classList.add('active');
+    }
+
     // =========================================================================
     // CHILD LOGIN & PIN PAD
     // =========================================================================
@@ -227,6 +236,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             el.loginKidsGrid.appendChild(card);
         });
+
+        // Dedicated Parent Zone profile card right on the login grid!
+        const parentCard = document.createElement('div');
+        parentCard.className = 'kid-select-card parent-profile-card';
+        parentCard.style.borderColor = '#4F46E5';
+        parentCard.style.background = '#F8FAFC';
+        parentCard.innerHTML = `
+            <div class="kid-avatar-bubble" style="background: #EEF2FF;">👨‍👩‍👧</div>
+            <div class="kid-select-name">Parent Zone</div>
+            <div style="font-size: 0.82rem; color: #4F46E5; font-weight: 700; background: #EEF2FF; padding: 2px 10px; border-radius: 9999px;">
+                Admin Mode 🔑
+            </div>
+        `;
+        parentCard.addEventListener('click', () => {
+            window.soundFX.playTap();
+            openParentPinModal();
+        });
+        el.loginKidsGrid.appendChild(parentCard);
     }
 
     function selectKidForLogin(kid) {
@@ -276,52 +303,115 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    async function handleKidPinInput(digit) {
-        if (!state.currentKid || state.pinBuffer.length >= 4) return;
-        window.soundFX.playTap();
-        state.pinBuffer += digit;
-        updatePinDots(el.pinDotsContainer, state.pinBuffer.length);
+    async function submitKidPin() {
+        if (!state.currentKid) {
+            showToast('Please select a profile first.', 'error');
+            return;
+        }
+        if (!state.pinBuffer || state.pinBuffer.length === 0) {
+            showToast('Please enter your 4-digit PIN.', 'error');
+            return;
+        }
 
-        if (state.pinBuffer.length === 4) {
-            const isValid = await window.kidsBankStore.verifyKidPin(state.currentKid.id, state.pinBuffer);
-            if (isValid) {
-                window.soundFX.playCoin();
-                window.confettiFX.burst({ count: 50 });
-                showToast(`Welcome back, ${state.currentKid.name}! 🌟`, 'success');
-                setTimeout(() => {
-                    state.pinBuffer = '';
-                    switchView('dashboard');
-                    renderChildDashboard();
-                }, 250);
-            } else {
-                window.soundFX.playError();
-                const dots = el.pinDotsContainer.querySelectorAll('.pin-dot');
-                dots.forEach(d => d.classList.add('shake'));
-                showToast('Incorrect PIN. Try again! 🤔', 'error');
-                setTimeout(() => {
-                    dots.forEach(d => d.classList.remove('shake'));
-                    state.pinBuffer = '';
-                    updatePinDots(el.pinDotsContainer, 0);
-                }, 400);
-            }
+        const isValid = await window.kidsBankStore.verifyKidPin(state.currentKid.id, state.pinBuffer);
+        if (isValid) {
+            window.soundFX.playCoin();
+            window.confettiFX.burst({ count: 50 });
+            showToast(`Welcome back, ${state.currentKid.name}! 🌟`, 'success');
+            setTimeout(() => {
+                state.pinBuffer = '';
+                switchView('dashboard');
+                renderChildDashboard();
+            }, 200);
+        } else {
+            window.soundFX.playError();
+            const dots = el.pinDotsContainer.querySelectorAll('.pin-dot');
+            dots.forEach(d => d.classList.add('shake'));
+            showToast(`Incorrect PIN for ${state.currentKid.name}. (Default: ${state.currentKid.pin || '1234'})`, 'error');
+            setTimeout(() => {
+                dots.forEach(d => d.classList.remove('shake'));
+                state.pinBuffer = '';
+                updatePinDots(el.pinDotsContainer, 0);
+            }, 400);
         }
     }
 
-    // Hardware keyboard support for PIN
+    async function handleKidPinInput(digit) {
+        if (!state.currentKid || state.pinBuffer.length >= 4) return;
+        window.soundFX.playTap();
+        state.pinBuffer += String(digit);
+        updatePinDots(el.pinDotsContainer, state.pinBuffer.length);
+
+        if (state.pinBuffer.length === 4) {
+            await submitKidPin();
+        }
+    }
+
+    if (el.btnSubmitKidPin) {
+        el.btnSubmitKidPin.addEventListener('click', async () => {
+            window.soundFX.playTap();
+            await submitKidPin();
+        });
+    }
+
+    // Hardware keyboard support for PIN (Full Desktop + Tablet Keyboard handling)
     window.addEventListener('keydown', (e) => {
-        if (el.viewChildLogin.classList.contains('active') && el.pinCardBox.style.display !== 'none') {
-            if (/^[0-9]$/.test(e.key)) {
-                handleKidPinInput(e.key);
-            } else if (e.key === 'Backspace') {
-                document.getElementById('btn-pin-back').click();
+        // Normalize key value from numpad or standard keyboard
+        let keyChar = e.key;
+        if (/^Numpad[0-9]$/.test(e.code)) {
+            keyChar = e.code.replace('Numpad', '');
+        }
+
+        // 1. IF PARENT PIN MODAL IS OPEN (Highest Priority)
+        if (el.modalParentGate && el.modalParentGate.classList.contains('active')) {
+            if (/^[0-9]$/.test(keyChar)) {
+                e.preventDefault();
+                handleParentPinInput(keyChar);
+            } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                e.preventDefault();
+                const backBtn = document.getElementById('btn-pgate-back');
+                if (backBtn) backBtn.click();
             } else if (e.key === 'Escape') {
-                document.getElementById('btn-pin-clear').click();
+                e.preventDefault();
+                const clearBtn = document.getElementById('btn-pgate-clear');
+                if (clearBtn) clearBtn.click();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                submitParentPin();
             }
-        } else if (el.modalParentGate.classList.contains('active')) {
-            if (/^[0-9]$/.test(e.key)) {
-                handleParentPinInput(e.key);
-            } else if (e.key === 'Backspace') {
-                document.getElementById('btn-pgate-back').click();
+            return;
+        }
+
+        // 2. IF CHILD LOGIN PIN BOX IS VISIBLE
+        if (el.viewChildLogin.classList.contains('active') && el.pinCardBox.style.display !== 'none') {
+            if (/^[0-9]$/.test(keyChar)) {
+                e.preventDefault();
+                handleKidPinInput(keyChar);
+            } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                e.preventDefault();
+                const backBtn = document.getElementById('btn-pin-back');
+                if (backBtn) backBtn.click();
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                const clearBtn = document.getElementById('btn-pin-clear');
+                if (clearBtn) clearBtn.click();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                submitKidPin();
+            }
+            return;
+        }
+
+        // 3. IF ON PROFILE SELECTION SCREEN (Shortcut numbers 1, 2, 3 select kid, 9 or P opens Parent Zone)
+        if (el.viewChildLogin.classList.contains('active') && el.pinCardBox.style.display === 'none') {
+            if (keyChar === '1' && state.kids[0]) {
+                selectKidForLogin(state.kids[0]);
+            } else if (keyChar === '2' && state.kids[1]) {
+                selectKidForLogin(state.kids[1]);
+            } else if (keyChar === '3' && state.kids[2]) {
+                selectKidForLogin(state.kids[2]);
+            } else if (keyChar === '9' || keyChar === '0' || e.key === 'p' || e.key === 'P') {
+                openParentPinModal();
             }
         }
     });
@@ -602,10 +692,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Already in parent mode, exit to kids mode
             switchView('login');
         } else {
-            // Open parent PIN modal
-            state.parentPinBuffer = '';
-            updatePinDots(el.parentGateDots, 0);
-            el.modalParentGate.classList.add('active');
+            openParentPinModal();
         }
     });
 
@@ -616,6 +703,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     el.btnCloseParentGate.addEventListener('click', () => {
         el.modalParentGate.classList.remove('active');
+        state.parentPinBuffer = '';
     });
 
     document.querySelectorAll('#parent-gate-keypad .btn-keypad[data-pdigit]').forEach(btn => {
@@ -639,33 +727,63 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    async function submitParentPin() {
+        if (!state.parentPinBuffer || state.parentPinBuffer.length === 0) {
+            showToast('Please enter the 4-digit parent PIN.', 'error');
+            return;
+        }
+
+        const isValid = await window.kidsBankStore.verifyParentPin(state.parentPinBuffer);
+        if (isValid) {
+            window.soundFX.playSuccessFanfare();
+            el.modalParentGate.classList.remove('active');
+            state.parentPinBuffer = '';
+            updatePinDots(el.parentGateDots, 0);
+            showToast('Parent Zone Unlocked 🔑', 'success');
+            switchView('parent');
+            try {
+                renderParentDashboard();
+            } catch (err) {
+                console.error('[KidsBank] Error rendering parent dashboard', err);
+            }
+        } else {
+            window.soundFX.playError();
+            const dots = el.parentGateDots.querySelectorAll('.pin-dot');
+            dots.forEach(d => d.classList.add('shake'));
+            showToast('Incorrect Parent PIN. (Default: 9999 or 1234)', 'error');
+            setTimeout(() => {
+                dots.forEach(d => d.classList.remove('shake'));
+                state.parentPinBuffer = '';
+                updatePinDots(el.parentGateDots, 0);
+            }, 400);
+        }
+    }
+
     async function handleParentPinInput(digit) {
         if (state.parentPinBuffer.length >= 4) return;
         window.soundFX.playTap();
-        state.parentPinBuffer += digit;
+        state.parentPinBuffer += String(digit);
         updatePinDots(el.parentGateDots, state.parentPinBuffer.length);
 
         if (state.parentPinBuffer.length === 4) {
-            const isValid = await window.kidsBankStore.verifyParentPin(state.parentPinBuffer);
-            if (isValid) {
-                window.soundFX.playSuccessFanfare();
-                el.modalParentGate.classList.remove('active');
-                state.parentPinBuffer = '';
-                showToast('Parent Zone Unlocked 🔑', 'success');
-                switchView('parent');
-                renderParentDashboard();
-            } else {
-                window.soundFX.playError();
-                const dots = el.parentGateDots.querySelectorAll('.pin-dot');
-                dots.forEach(d => d.classList.add('shake'));
-                showToast('Incorrect Parent PIN. (Default: 9999)', 'error');
-                setTimeout(() => {
-                    dots.forEach(d => d.classList.remove('shake'));
-                    state.parentPinBuffer = '';
-                    updatePinDots(el.parentGateDots, 0);
-                }, 400);
-            }
+            await submitParentPin();
         }
+    }
+
+    if (el.btnSubmitParentPin) {
+        el.btnSubmitParentPin.addEventListener('click', async () => {
+            window.soundFX.playTap();
+            await submitParentPin();
+        });
+    }
+
+    if (el.btnQuickParentDemo) {
+        el.btnQuickParentDemo.addEventListener('click', async () => {
+            window.soundFX.playTap();
+            state.parentPinBuffer = '9999';
+            updatePinDots(el.parentGateDots, 4);
+            await submitParentPin();
+        });
     }
 
     // =========================================================================
@@ -684,10 +802,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     function renderParentDashboard() {
-        renderParentKidsList();
-        renderParentChoresCenter();
-        renderAuditTable();
-        populateKidDropdowns();
+        try {
+            populateKidDropdowns();
+            renderParentKidsList();
+            renderParentChoresCenter();
+            renderAuditTable();
+        } catch (err) {
+            console.error('[KidsBank] Parent dashboard render error:', err);
+        }
     }
 
     function populateKidDropdowns() {
@@ -1027,3 +1149,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initial view
     switchView('login');
 });
+

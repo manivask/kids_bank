@@ -110,3 +110,4 @@ apps/kids_bank/
 ├── server.py               # Zero-dependency local development server
 └── start_app.bat           # 1-click Windows launcher
 ```
+
