@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KidsBank 🏦 - Kid & Parent Money Hub</title>
+    <title>Kids Banking App 🏦</title>
     
     <!-- Google Fonts for Friendly & Clean Look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,93 +20,221 @@
             <div class="brand-badge" id="btn-brand-home">
                 <div class="brand-logo-icon">🏦</div>
                 <div>
-                    <span class="brand-title">KidsBank</span>
-                    <span class="brand-tag">Tablet Edition</span>
+                    <span class="brand-title">Kids Banking App</span>
+                    <span class="brand-tag">Safe & Fun Banking</span>
                 </div>
             </div>
 
             <div class="nav-actions">
+                <!-- Inactivity Timer Display (Active during logged-in sessions) -->
+                <div id="session-timer-pill" class="session-timer-badge" style="display: none;" title="Auto logout timer (resets on activity)">
+                    <span>⏱️ Auto-Logout:</span>
+                    <strong id="session-time-left">5:00</strong>
+                </div>
+
                 <button type="button" class="btn-icon" id="btn-sound-toggle" title="Toggle Sound FX" aria-label="Toggle Sound FX">
                     🔊
                 </button>
+                
+                <!-- Parent Zone Quick Button -->
                 <button type="button" class="btn-parent-toggle" id="btn-parent-zone">
                     <span>🔑</span>
                     <span id="nav-mode-label">Parent Zone</span>
+                </button>
+
+                <!-- Logout Button (Shown when a kid or parent is active) -->
+                <button type="button" class="btn-logout-toggle" id="btn-session-logout" style="display: none;" title="Secure Logout">
+                    <span>🚪</span>
+                    <span>Log Out</span>
                 </button>
             </div>
         </header>
 
         <!-- ===================================================================
-             VIEW 1: CHILD LOGIN (Profile Selection & 4-Digit PIN)
+             VIEW 1: KID LOGIN & REGISTRATION HUB
              =================================================================== -->
         <main id="view-child-login" class="view-section active">
             <div class="login-container">
-                <h1 class="login-heading">Who is Banking Today? 🌟</h1>
-                <p class="login-sub">Tap your profile avatar to unlock your bank vault!</p>
+                <h1 class="login-heading">Welcome to Kids Banking App! 🌟</h1>
+                <p class="login-sub">Learn to save, spend wisely, and earn rewards for good habits!</p>
 
-                <!-- Dynamic Kids Grid -->
-                <div class="kids-avatar-grid" id="login-kids-grid">
-                    <!-- Populated by JS -->
+                <!-- Auth Navigation Mode Switcher -->
+                <div class="auth-switch-bar">
+                    <button type="button" class="btn-auth-tab active" id="tab-login-btn">
+                        <span>🔐</span> Kid Login
+                    </button>
+                    <button type="button" class="btn-auth-tab" id="tab-register-btn">
+                        <span>✨</span> Register New Kid
+                    </button>
+                    <button type="button" class="btn-auth-tab" id="tab-directory-btn">
+                        <span>👥</span> Kids Directory (50+)
+                    </button>
                 </div>
 
-                <!-- 4-Digit PIN Pad Box -->
-                <div class="pin-entry-card" id="pin-card-box" style="display: none;">
-                    <div id="pin-kid-header" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                        <span id="pin-kid-avatar" style="font-size: 2rem;">🦁</span>
-                        <h2 id="pin-kid-title" style="font-family: var(--font-heading); font-size: 1.4rem;">Leo's PIN</h2>
+                <!-- 1. KID LOGIN FORM (Username & 4-Digit PIN) -->
+                <div class="auth-card-box" id="auth-box-login">
+                    <h2 class="auth-card-title">Kid Sign In 🚀</h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.25rem;">
+                        Enter your username and secret 4-digit PIN:
+                    </p>
+
+                    <form id="form-kid-login" autocomplete="off">
+                        <div class="form-group" style="text-align: left;">
+                            <label class="form-label" for="login-username">Login Username</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">👤</span>
+                                <input type="text" id="login-username" class="form-input" placeholder="e.g. leo, maya, sammy" required autofocus>
+                            </div>
+                            <span class="form-help-hint">Demo accounts: <strong>leo</strong> (PIN: 1234), <strong>maya</strong> (PIN: 5678), <strong>sammy</strong> (PIN: 1111)</span>
+                        </div>
+
+                        <div class="form-group" style="text-align: left;">
+                            <label class="form-label" for="login-pin">4-Digit Security PIN</label>
+                            <div class="input-with-icon">
+                                <span class="input-icon">🔒</span>
+                                <input type="password" id="login-pin" class="form-input" inputmode="numeric" maxlength="4" placeholder="••••" required>
+                            </div>
+                        </div>
+
+                        <div id="login-error-msg" class="auth-error-alert" style="display: none;"></div>
+
+                        <button type="submit" class="btn-primary-action" id="btn-submit-kid-login" style="width: 100%; margin-top: 0.5rem;">
+                            Sign In to My Bank 🏦
+                        </button>
+
+                        <!-- Quick Demo Fill Chips -->
+                        <div class="quick-demo-accounts">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">Quick Demo Sign In:</span>
+                            <div class="demo-pills-row">
+                                <button type="button" class="btn-demo-pill" data-demouser="leo" data-demopin="1234">🦁 Leo</button>
+                                <button type="button" class="btn-demo-pill" data-demouser="maya" data-demopin="5678">🚀 Maya</button>
+                                <button type="button" class="btn-demo-pill" data-demouser="sammy" data-demopin="1111">🦕 Sammy</button>
+                                <button type="button" class="btn-demo-pill" data-demouser="emma4" data-demopin="1548">🦄 Emma</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 2. KID REGISTRATION FORM (Full real kids profile setup) -->
+                <div class="auth-card-box" id="auth-box-register" style="display: none;">
+                    <h2 class="auth-card-title">Register New Kid Account ✨</h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.25rem;">
+                        Fill in your details to open your personal Kids Bank vault with a <strong>$25 Welcome Bonus!</strong>
+                    </p>
+
+                    <form id="form-kid-register" autocomplete="off">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
+                            <div class="form-group">
+                                <label class="form-label" for="reg-name">Kid's Full Name *</label>
+                                <input type="text" id="reg-name" class="form-input" placeholder="e.g. Lucas Smith" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="reg-school">School Name *</label>
+                                <input type="text" id="reg-school" class="form-input" placeholder="e.g. Lincoln Elementary" required>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
+                            <div class="form-group">
+                                <label class="form-label" for="reg-parent">Parent / Guardian Name *</label>
+                                <input type="text" id="reg-parent" class="form-input" placeholder="e.g. Sarah & Michael Smith" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="reg-dob">Date of Birth *</label>
+                                <input type="date" id="reg-dob" class="form-input" required>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
+                            <div class="form-group">
+                                <label class="form-label" for="reg-username">Login User Name *</label>
+                                <input type="text" id="reg-username" class="form-input" placeholder="e.g. lucas8" pattern="[a-zA-Z0-9_]{3,20}" required>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">3-20 letters/numbers</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="reg-pin">4-Digit Security PIN *</label>
+                                <input type="password" id="reg-pin" class="form-input" inputmode="numeric" maxlength="4" placeholder="••••" required>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">4 numbers to login</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="text-align: left;">
+                            <label class="form-label">Choose Your Banking Avatar</label>
+                            <div class="avatar-selection-row" id="avatar-picker-options">
+                                <button type="button" class="btn-avatar-choice selected" data-av="🦁">🦁</button>
+                                <button type="button" class="btn-avatar-choice" data-av="🚀">🚀</button>
+                                <button type="button" class="btn-avatar-choice" data-av="🦕">🦕</button>
+                                <button type="button" class="btn-avatar-choice" data-av="🦄">🦄</button>
+                                <button type="button" class="btn-avatar-choice" data-av="🐼">🐼</button>
+                                <button type="button" class="btn-avatar-choice" data-av="🐯">🐯</button>
+                                <button type="button" class="btn-avatar-choice" data-av="🦊">🦊</button>
+                                <button type="button" class="btn-avatar-choice" data-av="⚽">⚽</button>
+                                <button type="button" class="btn-avatar-choice" data-av="🎨">🎨</button>
+                                <button type="button" class="btn-avatar-choice" data-av="🌟">🌟</button>
+                            </div>
+                        </div>
+
+                        <div id="register-error-msg" class="auth-error-alert" style="display: none;"></div>
+
+                        <button type="submit" class="btn-primary-action" id="btn-submit-register" style="width: 100%; margin-top: 0.5rem;">
+                            Complete Registration & Claim $25 Bonus 🎉
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 3. KIDS DIRECTORY (Scalable to 50+ kids with real-time search) -->
+                <div class="auth-card-box" id="auth-box-directory" style="display: none; max-width: 850px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+                        <div>
+                            <h2 class="auth-card-title" style="margin: 0;">Kids Account Directory 👥</h2>
+                            <span id="directory-total-badge" style="font-size: 0.85rem; color: var(--text-muted);">50 Registered Kids Accounts</span>
+                        </div>
+                        <div style="max-width: 320px; width: 100%;">
+                            <input type="text" id="directory-search-input" class="form-input" placeholder="🔍 Search name, username, school..." style="min-height: 40px; padding: 0.4rem 0.9rem; font-size: 0.95rem;">
+                        </div>
                     </div>
-                    <p style="color: var(--text-muted); font-size: 0.95rem;">Enter your 4-digit secret PIN:</p>
 
-                    <div class="pin-display" id="pin-dots-container">
-                        <div class="pin-dot"></div>
-                        <div class="pin-dot"></div>
-                        <div class="pin-dot"></div>
-                        <div class="pin-dot"></div>
-                    </div>
-
-                    <!-- On-Screen Tablet Touch Keypad -->
-                    <div class="keypad-grid">
-                        <button type="button" class="btn-keypad" data-digit="1">1</button>
-                        <button type="button" class="btn-keypad" data-digit="2">2</button>
-                        <button type="button" class="btn-keypad" data-digit="3">3</button>
-                        <button type="button" class="btn-keypad" data-digit="4">4</button>
-                        <button type="button" class="btn-keypad" data-digit="5">5</button>
-                        <button type="button" class="btn-keypad" data-digit="6">6</button>
-                        <button type="button" class="btn-keypad" data-digit="7">7</button>
-                        <button type="button" class="btn-keypad" data-digit="8">8</button>
-                        <button type="button" class="btn-keypad" data-digit="9">9</button>
-                        <button type="button" class="btn-keypad btn-aux" id="btn-pin-clear">C</button>
-                        <button type="button" class="btn-keypad" data-digit="0">0</button>
-                        <button type="button" class="btn-keypad btn-aux" id="btn-pin-back">⌫</button>
-                    </div>
-
-                    <button type="button" class="btn-primary-action" id="btn-submit-kid-pin" style="width: 100%; margin-top: 0.5rem; margin-bottom: 0.75rem;">
-                        Unlock Vault 🚀
-                    </button>
-
-                    <div class="pin-hint" id="pin-sample-hint">
-                        💡 Default PIN for testing: <strong>1234</strong>
+                    <!-- Scrollable Directory Grid -->
+                    <div class="directory-cards-container" id="directory-kids-grid">
+                        <!-- Populated by JS -->
                     </div>
                 </div>
             </div>
         </main>
 
         <!-- ===================================================================
-             VIEW 2: CHILD DASHBOARD
+             VIEW 2: INDIVIDUAL CHILD DASHBOARD
              =================================================================== -->
         <main id="view-child-dashboard" class="view-section">
-            <!-- Kid Greeting Banner -->
+            <!-- Kid Greeting Banner & Active Profile Details -->
             <div class="child-header-banner">
                 <div class="kid-welcome">
                     <div class="kid-header-avatar" id="dash-avatar">🦁</div>
                     <div>
-                        <h1 class="kid-welcome-name">Hi, <span id="dash-name">Leo</span>! 👋</h1>
-                        <p class="kid-welcome-sub">Welcome to your personal bank dashboard.</p>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <h1 class="kid-welcome-name">Hi, <span id="dash-name">Leo</span>! 👋</h1>
+                            <span class="user-handle-tag" id="dash-username-badge">@leo</span>
+                        </div>
+                        <p class="kid-welcome-sub">
+                            🏫 <span id="dash-school-name">School</span> • 👨‍👩‍👧 <span id="dash-parent-name">Parents</span>
+                        </p>
                     </div>
                 </div>
-                <button type="button" class="btn-switch-kid" id="btn-dash-switch-kid">
-                    🔄 Switch Kid
-                </button>
+
+                <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+                    <!-- Parent Quick Credit inside Kid View -->
+                    <button type="button" class="btn-parent-credit-action" id="btn-open-parent-credit-modal">
+                        <span>🎁</span>
+                        <span>Parent Credit / Bonus</span>
+                    </button>
+                    <!-- Switch / Logout -->
+                    <button type="button" class="btn-switch-kid" id="btn-dash-logout">
+                        🚪 Log Out
+                    </button>
+                </div>
             </div>
 
             <!-- Balances: Checking (Wallet) & Savings (Piggy Bank) -->
@@ -169,8 +297,8 @@
                     <div class="filter-pills" id="dash-filter-pills">
                         <button type="button" class="btn-filter-pill active" data-filter="all">All</button>
                         <button type="button" class="btn-filter-pill" data-filter="spend">Spending 💸</button>
-                        <button type="button" class="btn-filter-pill" data-filter="allowance">Allowance 💵</button>
-                        <button type="button" class="btn-filter-pill" data-filter="chore">Chores 🌟</button>
+                        <button type="button" class="btn-filter-pill" data-filter="allowance">Monthly Credits 💵</button>
+                        <button type="button" class="btn-filter-pill" data-filter="chore">Job Bonuses 🌟</button>
                         <button type="button" class="btn-filter-pill" data-filter="transfer">Transfers 🔄</button>
                     </div>
                 </div>
@@ -197,14 +325,20 @@
 
             <!-- Parent Navigation Tabs -->
             <div class="parent-tabs">
-                <button type="button" class="parent-tab-btn active" data-ptab="tab-kids">Children Overview</button>
-                <button type="button" class="parent-tab-btn" data-ptab="tab-chores">Award Chore Bonuses</button>
+                <button type="button" class="parent-tab-btn active" data-ptab="tab-kids">Children Overview (50+)</button>
+                <button type="button" class="parent-tab-btn" data-ptab="tab-chores">Award Job/Chore Bonuses</button>
                 <button type="button" class="parent-tab-btn" data-ptab="tab-audit">Transaction Audit</button>
                 <button type="button" class="parent-tab-btn" data-ptab="tab-settings">Settings & Backup</button>
             </div>
 
             <!-- TAB 1: Children Overview -->
             <div id="tab-kids" class="parent-tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                    <div style="max-width: 320px; width: 100%;">
+                        <input type="text" id="parent-kids-search" class="form-input" placeholder="🔍 Filter kids by name, school, username..." style="min-height: 42px; padding: 0.4rem 0.9rem;">
+                    </div>
+                    <span id="parent-kids-count-badge" style="font-weight: 700; color: var(--text-muted);">50 Kids Registered</span>
+                </div>
                 <div class="parent-kids-grid" id="parent-kids-list">
                     <!-- Cards populated by JS -->
                 </div>
@@ -214,7 +348,7 @@
             <div id="tab-chores" class="parent-tab-content" style="display: none;">
                 <div class="content-box">
                     <div class="box-header">
-                        <h2 class="box-title">Chore & Activity Bonus Center 🌟</h2>
+                        <h2 class="box-title">Chore & Job Bonus Center 🌟</h2>
                         <div style="display: flex; gap: 0.5rem; align-items: center;">
                             <label for="award-target-kid" style="font-weight: 700; font-size: 0.95rem;">Reward Child:</label>
                             <select id="award-target-kid" class="form-select" style="min-height: 40px; padding: 0.3rem 0.8rem; width: auto;">
@@ -295,12 +429,25 @@
                     <h2 class="box-title" style="margin-bottom: 1.25rem;">Parent Settings & Data Portability ⚙️</h2>
                     
                     <div class="form-group" style="max-width: 400px;">
-                        <label class="form-label">Parent PIN</label>
+                        <label class="form-label">Parent PIN / Password</label>
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="password" id="input-new-parent-pin" class="form-input" maxlength="4" placeholder="Current: 9999">
                             <button type="button" class="btn-secondary-action" id="btn-save-parent-pin">Update</button>
                         </div>
-                        <span style="font-size: 0.85rem; color: var(--text-muted);">4-digit passcode for accessing Parent Zone.</span>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">4-digit passcode for accessing Parent Zone & approving parent credits.</span>
+                    </div>
+
+                    <div class="form-group" style="max-width: 400px; margin-top: 1.5rem;">
+                        <label class="form-label">Auto-Logout Session Inactivity Timeout</label>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <select id="select-session-timeout" class="form-select">
+                                <option value="2">2 Minutes</option>
+                                <option value="5" selected>5 Minutes (Standard Safe Mode)</option>
+                                <option value="10">10 Minutes</option>
+                                <option value="15">15 Minutes</option>
+                            </select>
+                        </div>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Automatically logs out the session after no mouse or touch activity.</span>
                     </div>
 
                     <hr style="margin: 2rem 0; border: none; border-top: 1px solid var(--border-color);">
@@ -319,7 +466,7 @@
                         </button>
                         <input type="file" id="file-import-input" accept=".json" style="display: none;">
                         <button type="button" class="btn-secondary-action" id="btn-reset-defaults" style="color: #DC2626; border-color: #FCA5A5;">
-                            ⚠️ Reset Demo Sample Data
+                            ⚠️ Reset Demo Sample Data (50 Kids)
                         </button>
                     </div>
                 </div>
@@ -339,7 +486,7 @@
                 <button type="button" class="btn-modal-close" id="btn-close-parent-gate">✕</button>
             </div>
             <div class="modal-body" style="text-align: center;">
-                <p style="color: var(--text-muted); margin-bottom: 0.75rem;">Enter 4-digit passcode or type on keyboard:</p>
+                <p style="color: var(--text-muted); margin-bottom: 0.75rem;">Enter 4-digit parent passcode or type on keyboard:</p>
                 
                 <div class="pin-display" id="parent-gate-dots" style="cursor: pointer;" title="Type on keyboard or use keypad below">
                     <div class="pin-dot"></div>
@@ -373,6 +520,65 @@
                         ⚡ Quick Demo Unlock
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Parent In-App Credit & Job Bonus (Authorized inside kid view) -->
+    <div class="modal-overlay" id="modal-kid-parent-credit">
+        <div class="modal-window" style="max-width: 480px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Parent Credit & Job Bonus 🎁</h3>
+                <button type="button" class="btn-modal-close" id="btn-close-kid-parent-credit">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-kid-parent-credit">
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.25rem;">
+                        Parents: Add monthly allowance credits or award job/chore bonuses directly to <strong id="p-credit-kid-name">Leo</strong>.
+                    </p>
+
+                    <div class="form-group">
+                        <label class="form-label">Transaction Type</label>
+                        <select id="p-credit-type-select" class="form-select">
+                            <option value="monthly_credit">💵 Monthly Allowance Credit (Split % to Wallet & Piggy)</option>
+                            <option value="job_bonus">🌟 Job / Chore / Activity Bonus</option>
+                            <option value="direct_gift">🎁 Direct Bonus Deposit (Wallet Only)</option>
+                        </select>
+                    </div>
+
+                    <!-- Chore preset picker (shown if job_bonus selected) -->
+                    <div class="form-group" id="p-credit-chore-picker-group" style="display: none;">
+                        <label class="form-label">Select Job / Activity</label>
+                        <select id="p-credit-chore-select" class="form-select">
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Credit / Bonus Amount ($)</label>
+                        <input type="number" step="0.50" min="0.01" id="p-credit-amount-input" class="form-input" placeholder="10.00" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Parent Note / Message (Optional)</label>
+                        <input type="text" id="p-credit-note-input" class="form-input" placeholder="e.g. Great job cleaning your room & homework!">
+                    </div>
+
+                    <div class="form-group" style="background: #FEF3C7; padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid #FDE68A;">
+                        <label class="form-label" style="margin-bottom: 0.25rem; color: #92400E;">Parent Password / PIN Verification *</label>
+                        <input type="password" id="p-credit-parent-pin" class="form-input" maxlength="4" placeholder="Enter Parent PIN (Default: 9999 or 1234)" required style="background: #FFFFFF;">
+                        <span style="font-size: 0.8rem; color: #B45309;">Required to confirm parent authorization.</span>
+                    </div>
+
+                    <div id="p-credit-error-msg" class="auth-error-alert" style="display: none;"></div>
+
+                    <div class="modal-footer" style="padding: 0; border: none; margin-top: 1.25rem;">
+                        <button type="button" class="btn-secondary-action" id="btn-cancel-kid-parent-credit">Cancel</button>
+                        <button type="submit" class="btn-primary-action" style="background: var(--bonus-gradient);">
+                            Confirm & Add Credits ✨
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -509,7 +715,7 @@
         </div>
     </div>
 
-    <!-- Modal: Parent Manual Deposit / Allowance -->
+    <!-- Modal: Parent Manual Deposit / Allowance (Inside Parent Portal) -->
     <div class="modal-overlay" id="modal-parent-deposit">
         <div class="modal-window">
             <div class="modal-header">
@@ -526,7 +732,7 @@
                     <div class="form-group">
                         <label class="form-label">Deposit Type</label>
                         <select id="p-deposit-type" class="form-select">
-                            <option value="allowance">Regular Scheduled Allowance (Split by %)</option>
+                            <option value="allowance">Regular Monthly Allowance (Split % by Settings)</option>
                             <option value="checking_only">Wallet Only (Checking)</option>
                             <option value="savings_only">Piggy Bank Only (Savings)</option>
                         </select>
@@ -540,7 +746,7 @@
         </div>
     </div>
 
-    <!-- Toast Notification Container -->
+    <!-- Inactivity Timeout Warning Toast / Notification -->
     <div class="toast-container" id="toast-container"></div>
 
     <!-- Scripts -->
@@ -550,4 +756,3 @@
     <script src="js/app.js"></script>
 </body>
 </html>
-

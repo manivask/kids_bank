@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "appName": "KidsBank",
+  "appName": "Kids Banking App",
   "settings": {
     "parentPin": "9999",
     "parentName": "Parent / Guardian",
@@ -12,247 +12,2351 @@
     {
       "id": "chore-1",
       "title": "Clean Bedroom & Make Bed",
-      "reward": 4.00,
+      "reward": 4,
       "icon": "🛏️",
       "category": "Household"
     },
     {
       "id": "chore-2",
       "title": "Help Wash & Dry Dishes",
-      "reward": 3.50,
+      "reward": 3.5,
       "icon": "🍽️",
       "category": "Kitchen"
     },
     {
       "id": "chore-3",
       "title": "Read for 30 Minutes",
-      "reward": 3.00,
+      "reward": 3,
       "icon": "📚",
       "category": "Learning"
     },
     {
       "id": "chore-4",
       "title": "Finish Homework on Time",
-      "reward": 5.00,
+      "reward": 5,
       "icon": "✏️",
       "category": "Learning"
     },
     {
       "id": "chore-5",
       "title": "Feed & Walk the Pet",
-      "reward": 2.50,
+      "reward": 2.5,
       "icon": "🐕",
       "category": "Pet Care"
     },
     {
       "id": "chore-6",
       "title": "Help Fold Laundry",
-      "reward": 3.00,
+      "reward": 3,
       "icon": "👕",
       "category": "Household"
     },
     {
       "id": "chore-7",
       "title": "Outstanding Kindness / Teamwork",
-      "reward": 5.00,
+      "reward": 5,
       "icon": "🌟",
       "category": "Bonus"
     }
   ],
   "categories": [
-    { "id": "toys", "name": "Toys & Figures", "icon": "🧸", "color": "#FF6B6B" },
-    { "id": "snacks", "name": "Treats & Snacks", "icon": "🍦", "color": "#FFA502" },
-    { "id": "books", "name": "Books & Comics", "icon": "📚", "color": "#2ED573" },
-    { "id": "gaming", "name": "Video Games & Apps", "icon": "🎮", "color": "#5352ED" },
-    { "id": "outings", "name": "Outings & Movies", "icon": "🎟️", "color": "#1E90FF" },
-    { "id": "clothes", "name": "Clothes & Gear", "icon": "🧢", "color": "#FF4757" },
-    { "id": "gifts", "name": "Gifts for Friends", "icon": "🎁", "color": "#FF78C4" },
-    { "id": "other", "name": "Other Spending", "icon": "✨", "color": "#747D8C" }
+    {
+      "id": "toys",
+      "name": "Toys & Figures",
+      "icon": "🧸",
+      "color": "#FF6B6B"
+    },
+    {
+      "id": "snacks",
+      "name": "Treats & Snacks",
+      "icon": "🍦",
+      "color": "#FFA502"
+    },
+    {
+      "id": "books",
+      "name": "Books & Comics",
+      "icon": "📚",
+      "color": "#2ED573"
+    },
+    {
+      "id": "gaming",
+      "name": "Video Games & Apps",
+      "icon": "🎮",
+      "color": "#5352ED"
+    },
+    {
+      "id": "outings",
+      "name": "Outings & Movies",
+      "icon": "🎟️",
+      "color": "#1E90FF"
+    },
+    {
+      "id": "clothes",
+      "name": "Clothes & Gear",
+      "icon": "🧢",
+      "color": "#FF4757"
+    },
+    {
+      "id": "gifts",
+      "name": "Gifts for Friends",
+      "icon": "🎁",
+      "color": "#FF78C4"
+    },
+    {
+      "id": "other",
+      "name": "Other Spending",
+      "icon": "✨",
+      "color": "#747D8C"
+    }
   ],
   "kids": [
     {
-      "id": "kid-leo",
+      "id": "kid-leo1",
       "name": "Leo",
+      "username": "leo",
+      "school": "Lincoln Elementary",
+      "parentName": "Robert & Sarah",
+      "dob": "2014-01-01",
       "pin": "1234",
       "avatar": "🦁",
-      "themeColor": "#FF9F43",
-      "checkingBalance": 34.50,
-      "savingsBalance": 65.00,
+      "checkingBalance": 15,
+      "savingsBalance": 25,
       "savingsGoal": {
         "title": "LEGO Space Shuttle",
-        "targetAmount": 80.00,
+        "targetAmount": 80,
         "icon": "🚀"
       },
       "allowance": {
-        "amount": 10.00,
-        "frequency": "weekly",
+        "amount": 5,
+        "frequency": "monthly",
         "savingsRatioPercent": 30,
-        "lastPaid": "2026-10-30T10:00:00.000Z"
+        "lastPaid": "2026-10-31T00:00:00.000Z"
       },
       "transactions": [
         {
-          "id": "txn-leo-1",
-          "date": "2026-10-25T14:30:00.000Z",
+          "id": "txn-leo1-1",
+          "date": "2026-10-25T14:00:00.000Z",
           "type": "deposit",
           "account": "checking",
           "category": "allowance",
-          "amount": 7.00,
-          "title": "Weekly Allowance (Checking)",
-          "note": "Regular weekly allowance"
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
         },
         {
-          "id": "txn-leo-2",
-          "date": "2026-10-25T14:30:00.000Z",
+          "id": "txn-leo1-2",
+          "date": "2026-10-25T14:00:00.000Z",
           "type": "deposit",
           "account": "savings",
           "category": "allowance",
-          "amount": 3.00,
-          "title": "Weekly Allowance (Savings 30%)",
-          "note": "Savings portion for Space Shuttle goal"
-        },
-        {
-          "id": "txn-leo-3",
-          "date": "2026-10-27T16:15:00.000Z",
-          "type": "bonus",
-          "account": "checking",
-          "category": "chore",
-          "amount": 4.00,
-          "title": "Bonus: Clean Bedroom & Make Bed",
-          "note": "Awarded by Parent"
-        },
-        {
-          "id": "txn-leo-4",
-          "date": "2026-10-29T18:40:00.000Z",
-          "type": "spend",
-          "account": "checking",
-          "category": "snacks",
-          "amount": 4.50,
-          "title": "Gelato Ice Cream Cup",
-          "note": "Trip to town with friends"
-        },
-        {
-          "id": "txn-leo-5",
-          "date": "2026-10-30T10:00:00.000Z",
-          "type": "bonus",
-          "account": "savings",
-          "category": "chore",
-          "amount": 5.00,
-          "title": "Bonus: Finish Homework on Time",
-          "note": "Great math homework completion"
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
         }
       ]
     },
     {
-      "id": "kid-maya",
+      "id": "kid-maya2",
       "name": "Maya",
+      "username": "maya",
+      "school": "Oakridge Academy",
+      "parentName": "David & Priya",
+      "dob": "2015-02-02",
       "pin": "5678",
       "avatar": "🚀",
-      "themeColor": "#9B59B6",
-      "checkingBalance": 48.00,
-      "savingsBalance": 115.00,
+      "checkingBalance": 17.75,
+      "savingsBalance": 30.5,
       "savingsGoal": {
         "title": "Digital Art Tablet",
-        "targetAmount": 150.00,
+        "targetAmount": 150,
         "icon": "🎨"
       },
       "allowance": {
-        "amount": 15.00,
-        "frequency": "weekly",
-        "savingsRatioPercent": 40,
-        "lastPaid": "2026-10-30T10:00:00.000Z"
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
       },
       "transactions": [
         {
-          "id": "txn-maya-1",
-          "date": "2026-10-24T11:00:00.000Z",
+          "id": "txn-maya2-1",
+          "date": "2026-10-25T14:00:00.000Z",
           "type": "deposit",
           "account": "checking",
           "category": "allowance",
-          "amount": 9.00,
-          "title": "Weekly Allowance (Checking)",
-          "note": "Weekly allowance split"
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
         },
         {
-          "id": "txn-maya-2",
-          "date": "2026-10-24T11:00:00.000Z",
+          "id": "txn-maya2-2",
+          "date": "2026-10-25T14:00:00.000Z",
           "type": "deposit",
           "account": "savings",
           "category": "allowance",
-          "amount": 6.00,
-          "title": "Weekly Allowance (Savings 40%)",
-          "note": "Art tablet fund"
-        },
-        {
-          "id": "txn-maya-3",
-          "date": "2026-10-28T15:20:00.000Z",
-          "type": "spend",
-          "account": "checking",
-          "category": "books",
-          "amount": 9.50,
-          "title": "Graphic Novel Vol. 2",
-          "note": "Bought at school book fair"
-        },
-        {
-          "id": "txn-maya-4",
-          "date": "2026-10-30T17:00:00.000Z",
-          "type": "bonus",
-          "account": "savings",
-          "category": "chore",
-          "amount": 5.00,
-          "title": "Bonus: Outstanding Kindness / Teamwork",
-          "note": "Helped brother with study project"
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
         }
       ]
     },
     {
-      "id": "kid-sam",
+      "id": "kid-sammy3",
       "name": "Sammy",
+      "username": "sammy",
+      "school": "Sunrise Middle School",
+      "parentName": "Michael & Jennifer",
+      "dob": "2016-03-03",
       "pin": "1111",
       "avatar": "🦕",
-      "themeColor": "#2ECC71",
-      "checkingBalance": 16.50,
-      "savingsBalance": 32.00,
+      "checkingBalance": 20.5,
+      "savingsBalance": 36,
       "savingsGoal": {
         "title": "T-Rex Action Dino",
-        "targetAmount": 40.00,
+        "targetAmount": 40,
         "icon": "🦖"
       },
       "allowance": {
-        "amount": 5.00,
-        "frequency": "weekly",
-        "savingsRatioPercent": 50,
-        "lastPaid": "2026-10-30T10:00:00.000Z"
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
       },
       "transactions": [
         {
-          "id": "txn-sam-1",
-          "date": "2026-10-26T09:00:00.000Z",
+          "id": "txn-sammy3-1",
+          "date": "2026-10-25T14:00:00.000Z",
           "type": "deposit",
           "account": "checking",
           "category": "allowance",
-          "amount": 2.50,
-          "title": "Weekly Allowance (Checking)",
-          "note": "Sammy's weekly fun money"
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
         },
         {
-          "id": "txn-sam-2",
-          "date": "2026-10-26T09:00:00.000Z",
+          "id": "txn-sammy3-2",
+          "date": "2026-10-25T14:00:00.000Z",
           "type": "deposit",
           "account": "savings",
           "category": "allowance",
-          "amount": 2.50,
-          "title": "Weekly Allowance (Savings 50%)",
-          "note": "Dino fund savings"
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-emma4",
+      "name": "Emma",
+      "username": "emma4",
+      "school": "Maple Valley School",
+      "parentName": "Carlos & Maria",
+      "dob": "2017-04-04",
+      "pin": "1411",
+      "avatar": "🦄",
+      "checkingBalance": 23.25,
+      "savingsBalance": 41.5,
+      "savingsGoal": {
+        "title": "Nintendo Switch Game",
+        "targetAmount": 60,
+        "icon": "🎮"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-emma4-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
         },
         {
-          "id": "txn-sam-3",
-          "date": "2026-10-28T12:00:00.000Z",
-          "type": "bonus",
+          "id": "txn-emma4-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-lucas5",
+      "name": "Lucas",
+      "username": "lucas5",
+      "school": "Riverdale Primary",
+      "parentName": "John & Lisa",
+      "dob": "2018-05-05",
+      "pin": "1548",
+      "avatar": "🐼",
+      "checkingBalance": 26,
+      "savingsBalance": 47,
+      "savingsGoal": {
+        "title": "New Skateboard & Helmet",
+        "targetAmount": 75,
+        "icon": "🛹"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-lucas5-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
           "account": "checking",
-          "category": "chore",
-          "amount": 2.50,
-          "title": "Bonus: Feed & Walk the Pet",
-          "note": "Fed puppy food nicely"
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-lucas5-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-sophia6",
+      "name": "Sophia",
+      "username": "sophia6",
+      "school": "Evergreen Elementary",
+      "parentName": "Raj & Anitha",
+      "dob": "2019-06-06",
+      "pin": "1685",
+      "avatar": "🐯",
+      "checkingBalance": 28.75,
+      "savingsBalance": 52.5,
+      "savingsGoal": {
+        "title": "Science Microscope Kit",
+        "targetAmount": 50,
+        "icon": "🔬"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-sophia6-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-sophia6-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-ethan7",
+      "name": "Ethan",
+      "username": "ethan7",
+      "school": "Discovery Charter School",
+      "parentName": "William & Amanda",
+      "dob": "2014-07-07",
+      "pin": "1822",
+      "avatar": "🦊",
+      "checkingBalance": 31.5,
+      "savingsBalance": 58,
+      "savingsGoal": {
+        "title": "Roller Skates",
+        "targetAmount": 65,
+        "icon": "🛼"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-ethan7-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-ethan7-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-olivia8",
+      "name": "Olivia",
+      "username": "olivia8",
+      "school": "Greenwood Elementary",
+      "parentName": "James & Jessica",
+      "dob": "2015-08-08",
+      "pin": "1959",
+      "avatar": "🐨",
+      "checkingBalance": 34.25,
+      "savingsBalance": 63.5,
+      "savingsGoal": {
+        "title": "Harry Potter Book Set",
+        "targetAmount": 55,
+        "icon": "📚"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-olivia8-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-olivia8-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-noah9",
+      "name": "Noah",
+      "username": "noah9",
+      "school": "Pinecrest Academy",
+      "parentName": "Daniel & Emily",
+      "dob": "2016-09-09",
+      "pin": "2096",
+      "avatar": "🐬",
+      "checkingBalance": 37,
+      "savingsBalance": 69,
+      "savingsGoal": {
+        "title": "LEGO Space Shuttle",
+        "targetAmount": 80,
+        "icon": "🚀"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-noah9-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-noah9-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-ava10",
+      "name": "Ava",
+      "username": "ava10",
+      "school": "Lincoln Elementary",
+      "parentName": "Alex & Taylor",
+      "dob": "2017-10-10",
+      "pin": "2233",
+      "avatar": "🐱",
+      "checkingBalance": 39.75,
+      "savingsBalance": 74.5,
+      "savingsGoal": {
+        "title": "Digital Art Tablet",
+        "targetAmount": 150,
+        "icon": "🎨"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-ava10-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-ava10-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-liam11",
+      "name": "Liam",
+      "username": "liam11",
+      "school": "Oakridge Academy",
+      "parentName": "Christopher & Megan",
+      "dob": "2018-11-11",
+      "pin": "2370",
+      "avatar": "🐶",
+      "checkingBalance": 42.5,
+      "savingsBalance": 80,
+      "savingsGoal": {
+        "title": "T-Rex Action Dino",
+        "targetAmount": 40,
+        "icon": "🦖"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-liam11-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-liam11-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-isabella12",
+      "name": "Isabella",
+      "username": "isabella12",
+      "school": "Sunrise Middle School",
+      "parentName": "Mark & Rachel",
+      "dob": "2019-12-12",
+      "pin": "2507",
+      "avatar": "⚽",
+      "checkingBalance": 45.25,
+      "savingsBalance": 85.5,
+      "savingsGoal": {
+        "title": "Nintendo Switch Game",
+        "targetAmount": 60,
+        "icon": "🎮"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-isabella12-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-isabella12-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-mason13",
+      "name": "Mason",
+      "username": "mason13",
+      "school": "Maple Valley School",
+      "parentName": "Robert & Sarah",
+      "dob": "2014-01-13",
+      "pin": "2644",
+      "avatar": "🎨",
+      "checkingBalance": 48,
+      "savingsBalance": 91,
+      "savingsGoal": {
+        "title": "New Skateboard & Helmet",
+        "targetAmount": 75,
+        "icon": "🛹"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-mason13-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-mason13-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-mia14",
+      "name": "Mia",
+      "username": "mia14",
+      "school": "Riverdale Primary",
+      "parentName": "David & Priya",
+      "dob": "2015-02-14",
+      "pin": "2781",
+      "avatar": "🌟",
+      "checkingBalance": 50.75,
+      "savingsBalance": 96.5,
+      "savingsGoal": {
+        "title": "Science Microscope Kit",
+        "targetAmount": 50,
+        "icon": "🔬"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-mia14-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-mia14-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-aiden15",
+      "name": "Aiden",
+      "username": "aiden15",
+      "school": "Evergreen Elementary",
+      "parentName": "Michael & Jennifer",
+      "dob": "2016-03-15",
+      "pin": "2918",
+      "avatar": "🎸",
+      "checkingBalance": 53.5,
+      "savingsBalance": 102,
+      "savingsGoal": {
+        "title": "Roller Skates",
+        "targetAmount": 65,
+        "icon": "🛼"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-aiden15-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-aiden15-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-harper16",
+      "name": "Harper",
+      "username": "harper16",
+      "school": "Discovery Charter School",
+      "parentName": "Carlos & Maria",
+      "dob": "2017-04-16",
+      "pin": "3055",
+      "avatar": "🤖",
+      "checkingBalance": 56.25,
+      "savingsBalance": 107.5,
+      "savingsGoal": {
+        "title": "Harry Potter Book Set",
+        "targetAmount": 55,
+        "icon": "📚"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-harper16-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-harper16-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-elijah17",
+      "name": "Elijah",
+      "username": "elijah17",
+      "school": "Greenwood Elementary",
+      "parentName": "John & Lisa",
+      "dob": "2018-05-17",
+      "pin": "3192",
+      "avatar": "👑",
+      "checkingBalance": 59,
+      "savingsBalance": 113,
+      "savingsGoal": {
+        "title": "LEGO Space Shuttle",
+        "targetAmount": 80,
+        "icon": "🚀"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-elijah17-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-elijah17-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-evelyn18",
+      "name": "Evelyn",
+      "username": "evelyn18",
+      "school": "Pinecrest Academy",
+      "parentName": "Raj & Anitha",
+      "dob": "2019-06-18",
+      "pin": "3329",
+      "avatar": "🌈",
+      "checkingBalance": 61.75,
+      "savingsBalance": 118.5,
+      "savingsGoal": {
+        "title": "Digital Art Tablet",
+        "targetAmount": 150,
+        "icon": "🎨"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-evelyn18-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-evelyn18-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-james19",
+      "name": "James",
+      "username": "james19",
+      "school": "Lincoln Elementary",
+      "parentName": "William & Amanda",
+      "dob": "2014-07-19",
+      "pin": "3466",
+      "avatar": "🦁",
+      "checkingBalance": 64.5,
+      "savingsBalance": 124,
+      "savingsGoal": {
+        "title": "T-Rex Action Dino",
+        "targetAmount": 40,
+        "icon": "🦖"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-james19-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-james19-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-abigail20",
+      "name": "Abigail",
+      "username": "abigail20",
+      "school": "Oakridge Academy",
+      "parentName": "James & Jessica",
+      "dob": "2015-08-20",
+      "pin": "3603",
+      "avatar": "🚀",
+      "checkingBalance": 67.25,
+      "savingsBalance": 129.5,
+      "savingsGoal": {
+        "title": "Nintendo Switch Game",
+        "targetAmount": 60,
+        "icon": "🎮"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-abigail20-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-abigail20-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-benjamin21",
+      "name": "Benjamin",
+      "username": "benjamin21",
+      "school": "Sunrise Middle School",
+      "parentName": "Daniel & Emily",
+      "dob": "2016-09-21",
+      "pin": "3740",
+      "avatar": "🦕",
+      "checkingBalance": 70,
+      "savingsBalance": 135,
+      "savingsGoal": {
+        "title": "New Skateboard & Helmet",
+        "targetAmount": 75,
+        "icon": "🛹"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-benjamin21-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-benjamin21-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-emily22",
+      "name": "Emily",
+      "username": "emily22",
+      "school": "Maple Valley School",
+      "parentName": "Alex & Taylor",
+      "dob": "2017-10-22",
+      "pin": "3877",
+      "avatar": "🦄",
+      "checkingBalance": 72.75,
+      "savingsBalance": 140.5,
+      "savingsGoal": {
+        "title": "Science Microscope Kit",
+        "targetAmount": 50,
+        "icon": "🔬"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-emily22-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-emily22-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-alexander23",
+      "name": "Alexander",
+      "username": "alexander23",
+      "school": "Riverdale Primary",
+      "parentName": "Christopher & Megan",
+      "dob": "2018-11-23",
+      "pin": "4014",
+      "avatar": "🐼",
+      "checkingBalance": 75.5,
+      "savingsBalance": 146,
+      "savingsGoal": {
+        "title": "Roller Skates",
+        "targetAmount": 65,
+        "icon": "🛼"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-alexander23-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-alexander23-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-ella24",
+      "name": "Ella",
+      "username": "ella24",
+      "school": "Evergreen Elementary",
+      "parentName": "Mark & Rachel",
+      "dob": "2019-12-24",
+      "pin": "4151",
+      "avatar": "🐯",
+      "checkingBalance": 78.25,
+      "savingsBalance": 151.5,
+      "savingsGoal": {
+        "title": "Harry Potter Book Set",
+        "targetAmount": 55,
+        "icon": "📚"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-ella24-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-ella24-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-henry25",
+      "name": "Henry",
+      "username": "henry25",
+      "school": "Discovery Charter School",
+      "parentName": "Robert & Sarah",
+      "dob": "2014-01-25",
+      "pin": "4288",
+      "avatar": "🦊",
+      "checkingBalance": 16,
+      "savingsBalance": 157,
+      "savingsGoal": {
+        "title": "LEGO Space Shuttle",
+        "targetAmount": 80,
+        "icon": "🚀"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-henry25-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-henry25-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-aria26",
+      "name": "Aria",
+      "username": "aria26",
+      "school": "Greenwood Elementary",
+      "parentName": "David & Priya",
+      "dob": "2015-02-26",
+      "pin": "4425",
+      "avatar": "🐨",
+      "checkingBalance": 18.75,
+      "savingsBalance": 162.5,
+      "savingsGoal": {
+        "title": "Digital Art Tablet",
+        "targetAmount": 150,
+        "icon": "🎨"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-aria26-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-aria26-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-sebastian27",
+      "name": "Sebastian",
+      "username": "sebastian27",
+      "school": "Pinecrest Academy",
+      "parentName": "Michael & Jennifer",
+      "dob": "2016-03-27",
+      "pin": "4562",
+      "avatar": "🐬",
+      "checkingBalance": 21.5,
+      "savingsBalance": 28,
+      "savingsGoal": {
+        "title": "T-Rex Action Dino",
+        "targetAmount": 40,
+        "icon": "🦖"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-sebastian27-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-sebastian27-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-chloe28",
+      "name": "Chloe",
+      "username": "chloe28",
+      "school": "Lincoln Elementary",
+      "parentName": "Carlos & Maria",
+      "dob": "2017-04-01",
+      "pin": "4699",
+      "avatar": "🐱",
+      "checkingBalance": 24.25,
+      "savingsBalance": 33.5,
+      "savingsGoal": {
+        "title": "Nintendo Switch Game",
+        "targetAmount": 60,
+        "icon": "🎮"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-chloe28-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-chloe28-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-daniel29",
+      "name": "Daniel",
+      "username": "daniel29",
+      "school": "Oakridge Academy",
+      "parentName": "John & Lisa",
+      "dob": "2018-05-02",
+      "pin": "4836",
+      "avatar": "🐶",
+      "checkingBalance": 27,
+      "savingsBalance": 39,
+      "savingsGoal": {
+        "title": "New Skateboard & Helmet",
+        "targetAmount": 75,
+        "icon": "🛹"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-daniel29-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-daniel29-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-grace30",
+      "name": "Grace",
+      "username": "grace30",
+      "school": "Sunrise Middle School",
+      "parentName": "Raj & Anitha",
+      "dob": "2019-06-03",
+      "pin": "4973",
+      "avatar": "⚽",
+      "checkingBalance": 29.75,
+      "savingsBalance": 44.5,
+      "savingsGoal": {
+        "title": "Science Microscope Kit",
+        "targetAmount": 50,
+        "icon": "🔬"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-grace30-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-grace30-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-matthew31",
+      "name": "Matthew",
+      "username": "matthew31",
+      "school": "Maple Valley School",
+      "parentName": "William & Amanda",
+      "dob": "2014-07-04",
+      "pin": "5110",
+      "avatar": "🎨",
+      "checkingBalance": 32.5,
+      "savingsBalance": 50,
+      "savingsGoal": {
+        "title": "Roller Skates",
+        "targetAmount": 65,
+        "icon": "🛼"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-matthew31-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-matthew31-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-zoe32",
+      "name": "Zoe",
+      "username": "zoe32",
+      "school": "Riverdale Primary",
+      "parentName": "James & Jessica",
+      "dob": "2015-08-05",
+      "pin": "5247",
+      "avatar": "🌟",
+      "checkingBalance": 35.25,
+      "savingsBalance": 55.5,
+      "savingsGoal": {
+        "title": "Harry Potter Book Set",
+        "targetAmount": 55,
+        "icon": "📚"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-zoe32-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-zoe32-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-jackson33",
+      "name": "Jackson",
+      "username": "jackson33",
+      "school": "Evergreen Elementary",
+      "parentName": "Daniel & Emily",
+      "dob": "2016-09-06",
+      "pin": "5384",
+      "avatar": "🎸",
+      "checkingBalance": 38,
+      "savingsBalance": 61,
+      "savingsGoal": {
+        "title": "LEGO Space Shuttle",
+        "targetAmount": 80,
+        "icon": "🚀"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-jackson33-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-jackson33-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-riley34",
+      "name": "Riley",
+      "username": "riley34",
+      "school": "Discovery Charter School",
+      "parentName": "Alex & Taylor",
+      "dob": "2017-10-07",
+      "pin": "5521",
+      "avatar": "🤖",
+      "checkingBalance": 40.75,
+      "savingsBalance": 66.5,
+      "savingsGoal": {
+        "title": "Digital Art Tablet",
+        "targetAmount": 150,
+        "icon": "🎨"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-riley34-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-riley34-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-david35",
+      "name": "David",
+      "username": "david35",
+      "school": "Greenwood Elementary",
+      "parentName": "Christopher & Megan",
+      "dob": "2018-11-08",
+      "pin": "5658",
+      "avatar": "👑",
+      "checkingBalance": 43.5,
+      "savingsBalance": 72,
+      "savingsGoal": {
+        "title": "T-Rex Action Dino",
+        "targetAmount": 40,
+        "icon": "🦖"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-david35-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-david35-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-layla36",
+      "name": "Layla",
+      "username": "layla36",
+      "school": "Pinecrest Academy",
+      "parentName": "Mark & Rachel",
+      "dob": "2019-12-09",
+      "pin": "5795",
+      "avatar": "🌈",
+      "checkingBalance": 46.25,
+      "savingsBalance": 77.5,
+      "savingsGoal": {
+        "title": "Nintendo Switch Game",
+        "targetAmount": 60,
+        "icon": "🎮"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-layla36-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-layla36-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-joseph37",
+      "name": "Joseph",
+      "username": "joseph37",
+      "school": "Lincoln Elementary",
+      "parentName": "Robert & Sarah",
+      "dob": "2014-01-10",
+      "pin": "5932",
+      "avatar": "🦁",
+      "checkingBalance": 49,
+      "savingsBalance": 83,
+      "savingsGoal": {
+        "title": "New Skateboard & Helmet",
+        "targetAmount": 75,
+        "icon": "🛹"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-joseph37-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-joseph37-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-penelope38",
+      "name": "Penelope",
+      "username": "penelope38",
+      "school": "Oakridge Academy",
+      "parentName": "David & Priya",
+      "dob": "2015-02-11",
+      "pin": "6069",
+      "avatar": "🚀",
+      "checkingBalance": 51.75,
+      "savingsBalance": 88.5,
+      "savingsGoal": {
+        "title": "Science Microscope Kit",
+        "targetAmount": 50,
+        "icon": "🔬"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-penelope38-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-penelope38-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-carter39",
+      "name": "Carter",
+      "username": "carter39",
+      "school": "Sunrise Middle School",
+      "parentName": "Michael & Jennifer",
+      "dob": "2016-03-12",
+      "pin": "6206",
+      "avatar": "🦕",
+      "checkingBalance": 54.5,
+      "savingsBalance": 94,
+      "savingsGoal": {
+        "title": "Roller Skates",
+        "targetAmount": 65,
+        "icon": "🛼"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-carter39-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-carter39-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-lily40",
+      "name": "Lily",
+      "username": "lily40",
+      "school": "Maple Valley School",
+      "parentName": "Carlos & Maria",
+      "dob": "2017-04-13",
+      "pin": "6343",
+      "avatar": "🦄",
+      "checkingBalance": 57.25,
+      "savingsBalance": 99.5,
+      "savingsGoal": {
+        "title": "Harry Potter Book Set",
+        "targetAmount": 55,
+        "icon": "📚"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-lily40-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-lily40-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-owen41",
+      "name": "Owen",
+      "username": "owen41",
+      "school": "Riverdale Primary",
+      "parentName": "John & Lisa",
+      "dob": "2018-05-14",
+      "pin": "6480",
+      "avatar": "🐼",
+      "checkingBalance": 60,
+      "savingsBalance": 105,
+      "savingsGoal": {
+        "title": "LEGO Space Shuttle",
+        "targetAmount": 80,
+        "icon": "🚀"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-owen41-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-owen41-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-hannah42",
+      "name": "Hannah",
+      "username": "hannah42",
+      "school": "Evergreen Elementary",
+      "parentName": "Raj & Anitha",
+      "dob": "2019-06-15",
+      "pin": "6617",
+      "avatar": "🐯",
+      "checkingBalance": 62.75,
+      "savingsBalance": 110.5,
+      "savingsGoal": {
+        "title": "Digital Art Tablet",
+        "targetAmount": 150,
+        "icon": "🎨"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-hannah42-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-hannah42-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-wyatt43",
+      "name": "Wyatt",
+      "username": "wyatt43",
+      "school": "Discovery Charter School",
+      "parentName": "William & Amanda",
+      "dob": "2014-07-16",
+      "pin": "6754",
+      "avatar": "🦊",
+      "checkingBalance": 65.5,
+      "savingsBalance": 116,
+      "savingsGoal": {
+        "title": "T-Rex Action Dino",
+        "targetAmount": 40,
+        "icon": "🦖"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-wyatt43-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-wyatt43-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-nora44",
+      "name": "Nora",
+      "username": "nora44",
+      "school": "Greenwood Elementary",
+      "parentName": "James & Jessica",
+      "dob": "2015-08-17",
+      "pin": "6891",
+      "avatar": "🐨",
+      "checkingBalance": 68.25,
+      "savingsBalance": 121.5,
+      "savingsGoal": {
+        "title": "Nintendo Switch Game",
+        "targetAmount": 60,
+        "icon": "🎮"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-nora44-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-nora44-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-john45",
+      "name": "John",
+      "username": "john45",
+      "school": "Pinecrest Academy",
+      "parentName": "Daniel & Emily",
+      "dob": "2016-09-18",
+      "pin": "7028",
+      "avatar": "🐬",
+      "checkingBalance": 71,
+      "savingsBalance": 127,
+      "savingsGoal": {
+        "title": "New Skateboard & Helmet",
+        "targetAmount": 75,
+        "icon": "🛹"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-john45-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-john45-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-scarlett46",
+      "name": "Scarlett",
+      "username": "scarlett46",
+      "school": "Lincoln Elementary",
+      "parentName": "Alex & Taylor",
+      "dob": "2017-10-19",
+      "pin": "7165",
+      "avatar": "🐱",
+      "checkingBalance": 73.75,
+      "savingsBalance": 132.5,
+      "savingsGoal": {
+        "title": "Science Microscope Kit",
+        "targetAmount": 50,
+        "icon": "🔬"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-scarlett46-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-scarlett46-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-jack47",
+      "name": "Jack",
+      "username": "jack47",
+      "school": "Oakridge Academy",
+      "parentName": "Christopher & Megan",
+      "dob": "2018-11-20",
+      "pin": "7302",
+      "avatar": "🐶",
+      "checkingBalance": 76.5,
+      "savingsBalance": 138,
+      "savingsGoal": {
+        "title": "Roller Skates",
+        "targetAmount": 65,
+        "icon": "🛼"
+      },
+      "allowance": {
+        "amount": 15,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-jack47-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 10.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-jack47-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 4.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-victoria48",
+      "name": "Victoria",
+      "username": "victoria48",
+      "school": "Sunrise Middle School",
+      "parentName": "Mark & Rachel",
+      "dob": "2019-12-21",
+      "pin": "7439",
+      "avatar": "⚽",
+      "checkingBalance": 79.25,
+      "savingsBalance": 143.5,
+      "savingsGoal": {
+        "title": "Harry Potter Book Set",
+        "targetAmount": 55,
+        "icon": "📚"
+      },
+      "allowance": {
+        "amount": 20,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-victoria48-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 14,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-victoria48-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 6,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-luke49",
+      "name": "Luke",
+      "username": "luke49",
+      "school": "Maple Valley School",
+      "parentName": "Robert & Sarah",
+      "dob": "2014-01-22",
+      "pin": "7576",
+      "avatar": "🎨",
+      "checkingBalance": 17,
+      "savingsBalance": 149,
+      "savingsGoal": {
+        "title": "LEGO Space Shuttle",
+        "targetAmount": 80,
+        "icon": "🚀"
+      },
+      "allowance": {
+        "amount": 5,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-luke49-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 3.5,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-luke49-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 1.5,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
+        }
+      ]
+    },
+    {
+      "id": "kid-aaliyah50",
+      "name": "Aaliyah",
+      "username": "aaliyah50",
+      "school": "Riverdale Primary",
+      "parentName": "David & Priya",
+      "dob": "2015-02-23",
+      "pin": "7713",
+      "avatar": "🌟",
+      "checkingBalance": 19.75,
+      "savingsBalance": 154.5,
+      "savingsGoal": {
+        "title": "Digital Art Tablet",
+        "targetAmount": 150,
+        "icon": "🎨"
+      },
+      "allowance": {
+        "amount": 10,
+        "frequency": "monthly",
+        "savingsRatioPercent": 30,
+        "lastPaid": "2026-10-31T00:00:00.000Z"
+      },
+      "transactions": [
+        {
+          "id": "txn-aaliyah50-1",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "checking",
+          "category": "allowance",
+          "amount": 7,
+          "title": "Monthly Allowance (Wallet)",
+          "note": "October Allowance"
+        },
+        {
+          "id": "txn-aaliyah50-2",
+          "date": "2026-10-25T14:00:00.000Z",
+          "type": "deposit",
+          "account": "savings",
+          "category": "allowance",
+          "amount": 3,
+          "title": "Monthly Allowance (Piggy Bank)",
+          "note": "Savings portion"
         }
       ]
     }
