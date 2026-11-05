@@ -55,9 +55,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Form: Kid Register
         formKidRegister: document.getElementById('form-kid-register'),
-        regName: document.getElementById('reg-name'),
+        regFirstName: document.getElementById('reg-first-name'),
+        regLastName: document.getElementById('reg-last-name'),
         regSchool: document.getElementById('reg-school'),
-        regParent: document.getElementById('reg-parent'),
+        regParent1FirstName: document.getElementById('reg-parent1-first-name'),
+        regParent1LastName: document.getElementById('reg-parent1-last-name'),
+        regParent2FirstName: document.getElementById('reg-parent2-first-name'),
+        regParent2LastName: document.getElementById('reg-parent2-last-name'),
+        regEmail: document.getElementById('reg-email'),
         regDob: document.getElementById('reg-dob'),
         regUsername: document.getElementById('reg-username'),
         regPin: document.getElementById('reg-pin'),
@@ -286,6 +291,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (viewName === 'login') {
             el.viewChildLogin.classList.add('active');
             state.parentModeActive = false;
+            el.btnParentZone.style.display = 'none';
             el.btnParentZone.classList.remove('active');
             el.navModeLabel.textContent = 'Parent Zone';
             el.btnSessionLogout.style.display = 'none';
@@ -293,6 +299,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (viewName === 'dashboard') {
             el.viewChildDashboard.classList.add('active');
             state.parentModeActive = false;
+            el.btnParentZone.style.display = 'inline-flex';
             el.btnParentZone.classList.remove('active');
             el.navModeLabel.textContent = 'Parent Zone';
             el.btnSessionLogout.style.display = 'inline-flex';
@@ -300,6 +307,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else if (viewName === 'parent') {
             el.viewParentPortal.classList.add('active');
             state.parentModeActive = true;
+            el.btnParentZone.style.display = 'inline-flex';
             el.btnParentZone.classList.add('active');
             el.navModeLabel.textContent = 'Kids View';
             el.btnSessionLogout.style.display = 'inline-flex';
@@ -428,7 +436,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // =========================================================================
-    // 2. KID REGISTRATION HANDLER (Name, School, Parent, DOB, Username, PIN)
+    // 2. KID REGISTRATION HANDLER
     // =========================================================================
     // Avatar selection choices
     document.querySelectorAll('.btn-avatar-choice').forEach(btn => {
@@ -444,18 +452,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.preventDefault();
         el.registerErrorMsg.style.display = 'none';
 
-        const name = el.regName.value.trim();
+        const firstName = el.regFirstName.value.trim();
+        const lastName = el.regLastName.value.trim();
         const school = el.regSchool.value.trim();
-        const parentName = el.regParent.value.trim();
+        const parent1FirstName = el.regParent1FirstName.value.trim();
+        const parent1LastName = el.regParent1LastName.value.trim();
+        const parent2FirstName = el.regParent2FirstName.value.trim();
+        const parent2LastName = el.regParent2LastName.value.trim();
+        const email = el.regEmail.value.trim();
         const dob = el.regDob.value;
         const username = el.regUsername.value.trim().toLowerCase();
         const pin = el.regPin.value.trim();
 
         try {
             const newKid = await window.kidsBankStore.registerKid({
-                name,
+                firstName,
+                lastName,
                 school,
-                parentName,
+                parent1FirstName,
+                parent1LastName,
+                parent2FirstName,
+                parent2LastName,
+                email,
                 dob,
                 username,
                 pin,

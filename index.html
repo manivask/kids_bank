@@ -36,8 +36,8 @@
                     🔊
                 </button>
                 
-                <!-- Parent Zone Quick Button -->
-                <button type="button" class="btn-parent-toggle" id="btn-parent-zone">
+                <!-- Parent Zone remains available after entering the app. -->
+                <button type="button" class="btn-parent-toggle" id="btn-parent-zone" style="display: none;">
                     <span>🔑</span>
                     <span id="nav-mode-label">Parent Zone</span>
                 </button>
@@ -125,26 +125,52 @@
                     <form id="form-kid-register" autocomplete="off">
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
                             <div class="form-group">
-                                <label class="form-label" for="reg-name">Kid's Full Name *</label>
-                                <input type="text" id="reg-name" class="form-input" placeholder="e.g. Lucas Smith" required>
+                                <label class="form-label" for="reg-first-name">Kid's First Name *</label>
+                                <input type="text" id="reg-first-name" class="form-input" placeholder="e.g. Lucas" autocomplete="given-name" required>
                             </div>
-
                             <div class="form-group">
-                                <label class="form-label" for="reg-school">School Name *</label>
-                                <input type="text" id="reg-school" class="form-input" placeholder="e.g. Lincoln Elementary" required>
+                                <label class="form-label" for="reg-last-name">Kid's Last Name *</label>
+                                <input type="text" id="reg-last-name" class="form-input" placeholder="e.g. Smith" autocomplete="family-name" required>
                             </div>
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
                             <div class="form-group">
-                                <label class="form-label" for="reg-parent">Parent / Guardian Name *</label>
-                                <input type="text" id="reg-parent" class="form-input" placeholder="e.g. Sarah & Michael Smith" required>
+                                <label class="form-label" for="reg-school">School Name *</label>
+                                <input type="text" id="reg-school" class="form-input" placeholder="e.g. Lincoln Elementary" required>
                             </div>
-
                             <div class="form-group">
                                 <label class="form-label" for="reg-dob">Date of Birth *</label>
                                 <input type="date" id="reg-dob" class="form-input" required>
                             </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
+                            <div class="form-group">
+                                <label class="form-label" for="reg-parent1-first-name">Parent / Guardian 1 First Name *</label>
+                                <input type="text" id="reg-parent1-first-name" class="form-input" placeholder="e.g. Sarah" autocomplete="given-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="reg-parent1-last-name">Parent / Guardian 1 Last Name *</label>
+                                <input type="text" id="reg-parent1-last-name" class="form-input" placeholder="e.g. Smith" autocomplete="family-name" required>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">
+                            <div class="form-group">
+                                <label class="form-label" for="reg-parent2-first-name">Parent / Guardian 2 First Name</label>
+                                <input type="text" id="reg-parent2-first-name" class="form-input" placeholder="e.g. Michael" autocomplete="given-name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="reg-parent2-last-name">Parent / Guardian 2 Last Name</label>
+                                <input type="text" id="reg-parent2-last-name" class="form-input" placeholder="e.g. Smith" autocomplete="family-name">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="text-align: left;">
+                            <label class="form-label" for="reg-email">Kid's Email (Optional)</label>
+                            <input type="email" id="reg-email" class="form-input" placeholder="e.g. lucas@example.com" autocomplete="email">
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Optional contact detail for future account recovery.</span>
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; text-align: left;">

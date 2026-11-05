@@ -8,14 +8,16 @@ A tablet-friendly financial learning application built for real kids. Supports *
 
 ### 1. 🔐 Kid Login & Registration System
 - **Real Kid Registration Form**:
-  - Kid's Full Name
+  - Kid's First Name and Last Name
   - School Name
-  - Parent / Guardian Name
+  - First and Last Name for Parent / Guardian 1; Parent / Guardian 2 is optional
+  - Optional kid email address, stored with the profile for future account-recovery support
   - Date of Birth (DOB)
   - Custom Login User Name (e.g. `lucas8`, `maya`)
   - 4-Digit Security PIN
   - Banking Avatar selection (🦁, 🚀, 🦕, 🦄, 🐼, 🐯, 🦊, ⚽, 🎨, 🌟)
   - **Instant $25 Welcome Account Gift** ($25 Checking / $50 Savings) on registration!
+- The optional email is collected for potential future recovery; PIN recovery is not automated yet.
 - **Kid Login Form**:
   - Sign in using **Username** + **4-digit PIN**
   - Quick Demo Chips (`leo`, `maya`, `sammy`, `emma4`)

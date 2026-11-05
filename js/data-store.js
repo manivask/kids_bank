@@ -283,14 +283,42 @@ class KidsBankDataStore {
     /**
      * Register a new kid profile
      */
-    async registerKid({ name, school, parentName, dob, username, pin, avatar }) {
-        const cleanName = String(name || '').trim();
+    async registerKid({
+        firstName,
+        lastName,
+        school,
+        parent1FirstName,
+        parent1LastName,
+        parent2FirstName,
+        parent2LastName,
+        email,
+        dob,
+        username,
+        pin,
+        avatar
+    }) {
+        const cleanFirstName = String(firstName || '').trim();
+        const cleanLastName = String(lastName || '').trim();
         const cleanUser = String(username || '').trim().toLowerCase();
         const cleanPin = String(pin || '').trim();
         const cleanSchool = String(school || '').trim();
-        const cleanParent = String(parentName || '').trim();
+        const cleanParent1FirstName = String(parent1FirstName || '').trim();
+        const cleanParent1LastName = String(parent1LastName || '').trim();
+        const cleanParent2FirstName = String(parent2FirstName || '').trim();
+        const cleanParent2LastName = String(parent2LastName || '').trim();
+        const cleanEmail = String(email || '').trim();
 
-        if (!cleanName) throw new Error('Please enter the child\'s name.');
+        if (!cleanFirstName) throw new Error('Please enter the child\'s first name.');
+        if (!cleanLastName) throw new Error('Please enter the child\'s last name.');
+        if (!cleanParent1FirstName || !cleanParent1LastName) {
+            throw new Error('Please enter the first and last name of Parent / Guardian 1.');
+        }
+        if (Boolean(cleanParent2FirstName) !== Boolean(cleanParent2LastName)) {
+            throw new Error('Please enter both the first and last name of Parent / Guardian 2, or leave both blank.');
+        }
+        if (cleanEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+            throw new Error('Please enter a valid email address, or leave it blank.');
+        }
         if (!cleanUser) throw new Error('Please choose a login username.');
         if (!/^[a-zA-Z0-9_]{3,20}$/.test(cleanUser)) {
             throw new Error('Username must be 3-20 characters long (letters, numbers, or underscores).');
@@ -310,13 +338,24 @@ class KidsBankDataStore {
 
         const defaultAvatars = ['🦁', '🚀', '🦕', '🦄', '🐼', '🐯', '🦊', '🐨', '⚽', '🎨'];
         const chosenAvatar = avatar || defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
+        const parentNames = [
+            `${cleanParent1FirstName} ${cleanParent1LastName}`,
+            cleanParent2FirstName ? `${cleanParent2FirstName} ${cleanParent2LastName}` : ''
+        ].filter(Boolean);
 
         const newKid = {
             id: `kid-${cleanUser}-${Date.now()}`,
-            name: cleanName,
+            firstName: cleanFirstName,
+            lastName: cleanLastName,
+            name: `${cleanFirstName} ${cleanLastName}`,
             username: cleanUser,
             school: cleanSchool || 'Elementary School',
-            parentName: cleanParent || 'Parent / Guardian',
+            parent1FirstName: cleanParent1FirstName,
+            parent1LastName: cleanParent1LastName,
+            parent2FirstName: cleanParent2FirstName,
+            parent2LastName: cleanParent2LastName,
+            parentName: parentNames.join(' & '),
+            email: cleanEmail,
             dob: dob || '2016-01-01',
             pin: cleanPin,
             avatar: chosenAvatar,
