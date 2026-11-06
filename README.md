@@ -64,3 +64,24 @@ Open in browser:
 👉 **[http://127.0.0.1:8085](http://127.0.0.1:8085)**
 
 *(Or double-click `start_app.bat` to launch on Windows).*
+
+## 🔒 Supabase Backend Preparation
+
+The browser app currently uses local storage and is **not yet connected to Supabase**.
+Do not use real children's information in the GitHub Pages preview until the app's
+guardian authentication and database access have both been validated.
+
+The existing Supabase project has `users`, `children`, and `transactions` tables.
+The reviewed schema showed RLS enabled but no policies, and a legacy
+`children.pin` column. The additive migration at
+[`supabase/migrations/20261106000000_guardian_access.sql`](./supabase/migrations/20261106000000_guardian_access.sql):
+
+- Adds guardian/child profile fields and transaction display fields without deleting existing rows.
+- Adds a confirmed-email guardian-link function and owner-scoped RLS policies.
+- Replaces API table-wide grants with column-level grants so app clients cannot read the legacy PIN.
+- Does not seed demo data or copy, hash, or otherwise use existing PIN values.
+
+Review and apply the migration through the Supabase SQL Editor before connecting the
+frontend. The app still needs Supabase Auth UI, transactional database operations,
+and deployment configuration for the project's public/publishable key. Never put a
+service-role key in the browser or GitHub Pages artifact.
