@@ -34,19 +34,33 @@ jobs:
         run: |
           node --check js/app.js
           node --check js/data-store.js
+          node --check js/guardian-portal.js
+          node --check js/supabase-config.js
 
       - name: Run registration tests
         run: node --test tests/registration.test.cjs
+
+      - name: Generate Supabase public client config
+        env:
+          SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          node -e "const fs=require('node:fs');const key=process.env.SUPABASE_PUBLISHABLE_KEY||'';if(key){if(key.startsWith('sb_secret_'))throw new Error('A Supabase secret key cannot be published');if(!key.startsWith('sb_publishable_')){const parts=key.split('.');if(parts.length!==3)throw new Error('Use a Supabase publishable key or legacy anon JWT');const claims=JSON.parse(Buffer.from(parts[1],'base64url').toString());if(claims.role!=='anon')throw new Error('Only an anon JWT may be used as the browser key');}}fs.writeFileSync('js/supabase-config.js', 'window.KIDS_BANK_SUPABASE_CONFIG = '+JSON.stringify({url:'https://rgdtshdtrwoqcjtmzygo.supabase.co',publishableKey:key})+';');"
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
 
+      - name: Prepare static site
+        run: |
+          mkdir -p site
+          cp index.html site/
+          cp -r css js data site/
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deployment

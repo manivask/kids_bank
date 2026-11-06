@@ -6,6 +6,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
+    if (document.documentElement.dataset.appMode === 'supabase') return;
+
     // Application State
     const state = {
         kids: [],

@@ -14,7 +14,112 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="app-viewport">
+    <main id="cloud-app" class="cloud-app" hidden>
+        <div class="cloud-shell">
+            <header class="cloud-header">
+                <div>
+                    <div class="brand-title">Kids Banking App</div>
+                    <p class="brand-tag">Guardian account & child profiles</p>
+                </div>
+                <button type="button" class="btn-secondary-action" id="cloud-signout" hidden>Sign out</button>
+            </header>
+
+            <section id="cloud-auth-panel" class="auth-card-box cloud-card">
+                <h1 class="auth-card-title" id="cloud-auth-title">Parent / Guardian Sign In</h1>
+                <p class="cloud-help">Sign in with your guardian account to manage your family profiles.</p>
+                <form id="cloud-auth-form">
+                    <div id="cloud-name-fields" hidden>
+                        <div class="cloud-form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-first-name">First Name</label>
+                                <input class="form-input" id="cloud-first-name" autocomplete="given-name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-last-name">Last Name</label>
+                                <input class="form-input" id="cloud-last-name" autocomplete="family-name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cloud-email">Email</label>
+                        <input class="form-input" id="cloud-email" type="email" autocomplete="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cloud-password">Password</label>
+                        <input class="form-input" id="cloud-password" type="password" minlength="8" autocomplete="current-password" required>
+                    </div>
+                    <p id="cloud-auth-message" class="cloud-message" role="status" aria-live="polite"></p>
+                    <button class="btn-primary-action" id="cloud-auth-submit" type="submit">Sign In</button>
+                </form>
+                <button type="button" class="cloud-link-button" id="cloud-auth-toggle">Create a guardian account</button>
+            </section>
+
+            <section id="cloud-family-panel" class="cloud-family" hidden>
+                <div class="cloud-family-heading">
+                    <div>
+                        <h1 class="auth-card-title">Your Family</h1>
+                        <p class="cloud-help">Signed in as <strong id="cloud-guardian-email"></strong></p>
+                    </div>
+                </div>
+                <p id="cloud-family-message" class="cloud-message" role="status" aria-live="polite"></p>
+                <div id="cloud-child-list" class="cloud-child-list"></div>
+                <details class="cloud-add-child">
+                    <summary class="btn-primary-action">Add a Child Profile</summary>
+                    <form id="cloud-child-form">
+                        <div class="cloud-form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-child-first">Child's First Name *</label>
+                                <input class="form-input" id="cloud-child-first" required autocomplete="given-name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-child-last">Child's Last Name *</label>
+                                <input class="form-input" id="cloud-child-last" required autocomplete="family-name">
+                            </div>
+                        </div>
+                        <div class="cloud-form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-child-school">School</label>
+                                <input class="form-input" id="cloud-child-school">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-child-dob">Date of Birth</label>
+                                <input class="form-input" id="cloud-child-dob" type="date">
+                            </div>
+                        </div>
+                        <div class="cloud-form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-parent1-first">Parent / Guardian 1 First Name *</label>
+                                <input class="form-input" id="cloud-parent1-first" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-parent1-last">Parent / Guardian 1 Last Name *</label>
+                                <input class="form-input" id="cloud-parent1-last" required>
+                            </div>
+                        </div>
+                        <div class="cloud-form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-parent2-first">Parent / Guardian 2 First Name</label>
+                                <input class="form-input" id="cloud-parent2-first">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-parent2-last">Parent / Guardian 2 Last Name</label>
+                                <input class="form-input" id="cloud-parent2-last">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="cloud-child-email">Child's Email (Optional)</label>
+                            <input class="form-input" id="cloud-child-email" type="email" autocomplete="off">
+                        </div>
+                        <p class="cloud-help">A child PIN is not collected or stored. Child sign-in is not enabled yet.</p>
+                        <p id="cloud-child-error" class="cloud-message cloud-error" role="alert"></p>
+                        <button class="btn-primary-action" id="cloud-child-submit" type="submit">Create Child Profile</button>
+                    </form>
+                </details>
+                <p class="cloud-notice">This Supabase preview currently supports guardian authentication and child profiles. Banking activity and balance changes are not enabled in this connected mode yet.</p>
+            </section>
+        </div>
+    </main>
+    <div class="app-viewport" id="demo-app">
         <!-- Top Navigation -->
         <header class="top-nav">
             <div class="brand-badge" id="btn-brand-home">
@@ -780,5 +885,8 @@
     <script src="js/confetti.js"></script>
     <script src="js/data-store.js"></script>
     <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/guardian-portal.js"></script>
 </body>
 </html>

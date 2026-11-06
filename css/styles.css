@@ -1537,4 +1537,175 @@ html, body {
     transform: translateY(-1px);
 }
 
+html[data-app-mode="supabase"] .app-viewport {
+    display: none;
+}
 
+.cloud-app[hidden],
+.cloud-family[hidden],
+.cloud-header [hidden] {
+    display: none;
+}
+
+.cloud-app {
+    min-height: 100vh;
+    padding: 1.5rem;
+    background:
+        radial-gradient(circle at 10% 5%, rgba(79, 70, 229, 0.12), transparent 30rem),
+        var(--bg-app);
+}
+
+.cloud-shell {
+    width: min(100%, 900px);
+    margin: 0 auto;
+}
+
+.cloud-header,
+.cloud-family-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.cloud-header .brand-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+.brand-tag,
+.cloud-help,
+.cloud-notice {
+    color: var(--text-muted);
+}
+
+.brand-tag {
+    margin: 0.2rem 0 0;
+}
+
+.cloud-card {
+    max-width: 520px;
+}
+
+.cloud-help {
+    line-height: 1.5;
+}
+
+.cloud-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+}
+
+.cloud-message {
+    min-height: 1.4rem;
+    margin: 0.75rem 0;
+    color: #166534;
+    line-height: 1.45;
+}
+
+.cloud-message:empty {
+    display: none;
+}
+
+.cloud-message.cloud-error {
+    color: #B91C1C;
+}
+
+.cloud-link-button {
+    display: block;
+    margin: 1rem auto 0;
+    padding: 0.5rem;
+    border: 0;
+    background: transparent;
+    color: var(--primary);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cloud-family {
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    box-shadow: var(--shadow-md);
+}
+
+.cloud-family-heading {
+    margin-bottom: 0.5rem;
+}
+
+.cloud-child-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.cloud-child-card {
+    padding: 1.1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: #F8FAFC;
+}
+
+.cloud-child-card h2 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+}
+
+.cloud-child-card .cloud-help {
+    margin: 0.4rem 0;
+}
+
+.cloud-balance {
+    margin: 0.75rem 0 0;
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.cloud-add-child {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.25rem;
+}
+
+.cloud-add-child summary {
+    width: fit-content;
+    list-style: none;
+    cursor: pointer;
+}
+
+.cloud-add-child summary::-webkit-details-marker {
+    display: none;
+}
+
+.cloud-add-child[open] summary {
+    margin-bottom: 1.5rem;
+}
+
+.cloud-notice {
+    margin: 1.5rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 560px) {
+    .cloud-app {
+        padding: 1rem;
+    }
+
+    .cloud-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .cloud-family {
+        padding: 1rem;
+    }
+}

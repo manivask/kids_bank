@@ -65,11 +65,13 @@ Open in browser:
 
 *(Or double-click `start_app.bat` to launch on Windows).*
 
-## 🔒 Supabase Backend Preparation
+## 🔒 Supabase Guardian Preview
 
-The browser app currently uses local storage and is **not yet connected to Supabase**.
-Do not use real children's information in the GitHub Pages preview until the app's
-guardian authentication and database access have both been validated.
+The GitHub Pages build can run in either demo mode (the existing local-storage app)
+or Supabase mode. Supabase mode provides guardian sign-up/sign-in and guardian-owned
+child profiles. It does not enable child PIN login, banking transactions, or balance
+changes. Do not use real children's information until the project configuration and
+account flows have been validated with synthetic data.
 
 The existing Supabase project has `users`, `children`, and `transactions` tables.
 The reviewed schema showed RLS enabled but no policies, and a legacy
@@ -81,7 +83,24 @@ The reviewed schema showed RLS enabled but no policies, and a legacy
 - Replaces API table-wide grants with column-level grants so app clients cannot read the legacy PIN.
 - Does not seed demo data or copy, hash, or otherwise use existing PIN values.
 
-Review and apply the migration through the Supabase SQL Editor before connecting the
-frontend. The app still needs Supabase Auth UI, transactional database operations,
-and deployment configuration for the project's public/publishable key. Never put a
-service-role key in the browser or GitHub Pages artifact.
+The first migration has been applied. Apply
+[`supabase/migrations/20261107000000_create_child_rpc.sql`](./supabase/migrations/20261107000000_create_child_rpc.sql)
+through the Supabase SQL Editor before using child-profile creation. It adds a
+guardian-authorized RPC that creates a child profile and its welcome ledger entries
+atomically, deriving ownership from the signed-in guardian link. The frontend does
+not read or write child PINs.
+
+To enable Supabase mode on GitHub Pages:
+
+1. Add the project's **publishable** key as the GitHub repository Actions variable
+   `SUPABASE_PUBLISHABLE_KEY` (Settings → Secrets and variables → Actions → Variables).
+   A legacy `anon` JWT is also accepted. Never configure a `service_role` or
+   `sb_secret_` key.
+2. In Supabase Auth URL Configuration, allow the GitHub Pages app URL
+   `https://manivask.github.io/kids_bank/` as a redirect URL.
+3. Rerun the Pages workflow or push to `main`. Without the variable, the site stays
+   in demo mode. With the variable configured, Supabase errors are shown and the
+   app does not fall back to local storage.
+
+Money movement remains disabled in this connected preview until dedicated atomic,
+guardian-authorized database operations are implemented and tested.
