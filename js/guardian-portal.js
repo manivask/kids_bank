@@ -23,6 +23,8 @@
     const signOutButton = document.getElementById('cloud-signout');
     const childList = document.getElementById('cloud-child-list');
     const guardianEmail = document.getElementById('cloud-guardian-email');
+    const bankingPanel = document.getElementById('cloud-banking-panel');
+    const transactionList = document.getElementById('cloud-transaction-list');
 
     if (!supabaseSdk || typeof supabaseSdk.createClient !== 'function') {
         authPanel.hidden = false;
@@ -34,21 +36,35 @@
     }
 
     const client = supabaseSdk.createClient(config.url, config.publishableKey);
+    if (!window.KidsBankingClient || typeof window.KidsBankingClient.createBankingApi !== 'function') {
+        throw new Error('The banking client did not load.');
+    }
+    const banking = window.KidsBankingClient.createBankingApi(client);
 
     let isSignUp = false;
     let currentUser = null;
+    let children = [];
+    let selectedChildId = null;
     let isBusy = false;
+    const pendingRequestIds = new Map();
 
     function showMessage(element, message, isError = false) {
         element.textContent = message;
         element.classList.toggle('cloud-error', isError);
     }
 
+    function bankingErrorMessage(error) {
+        const message = error?.message || String(error);
+        if (/kids_bank_(apply_transaction|set_allowance)|schema cache|reverses_transaction_id|operation_id/i.test(message)) {
+            return `${message} Apply supabase/migrations/20261108000000_guardian_banking.sql in the Supabase SQL Editor, then retry.`;
+        }
+        return message;
+    }
+
     function setBusy(busy) {
         isBusy = busy;
-        [authSubmit, signOutButton, document.getElementById('cloud-child-submit')].forEach((button) => {
-            button.disabled = busy;
-        });
+        document.querySelectorAll('#cloud-auth-form button, #cloud-family-panel button')
+            .forEach((button) => { button.disabled = busy; });
     }
 
     function setAuthMode(signUp) {
@@ -68,7 +84,13 @@
         authPanel.hidden = false;
         familyPanel.hidden = true;
         signOutButton.hidden = true;
+        bankingPanel.hidden = true;
+        children = [];
+        selectedChildId = null;
+        pendingRequestIds.clear();
         childList.replaceChildren();
+        transactionList.replaceChildren();
+        showMessage(document.getElementById('cloud-banking-message'), '');
     }
 
     function addText(parent, tag, className, text) {
@@ -82,13 +104,16 @@
     function renderChildren(children) {
         childList.replaceChildren();
         if (!children.length) {
+            bankingPanel.hidden = true;
             addText(childList, 'p', 'cloud-help', 'No child profiles yet. Add one below to get started.');
             return;
         }
 
         children.forEach((child) => {
-            const card = document.createElement('article');
-            card.className = 'cloud-child-card';
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = `cloud-child-card cloud-child-select${child.id === selectedChildId ? ' selected' : ''}`;
+            card.dataset.childId = child.id;
             const fullName = [child.first_name, child.last_name].filter(Boolean).join(' ')
                 || child.child_name || 'Child profile';
             addText(card, 'h2', '', fullName);
@@ -99,8 +124,140 @@
                 'cloud-balance',
                 `Wallet: $${Number(child.checking_balance || 0).toFixed(2)} · Piggy Bank: $${Number(child.savings_balance || 0).toFixed(2)}`
             );
+            addText(card, 'span', 'cloud-child-select-hint',
+                child.id === selectedChildId ? 'Selected account' : 'Manage account');
             childList.appendChild(card);
         });
+    }
+
+    function selectedChild() {
+        return children.find((child) => child.id === selectedChildId) || null;
+    }
+
+    function money(value) {
+        return `$${Number(value || 0).toFixed(2)}`;
+    }
+
+    function requestIdFor(actionName) {
+        const key = `${selectedChildId}:${actionName}`;
+        if (!pendingRequestIds.has(key)) {
+            pendingRequestIds.set(key, window.crypto.randomUUID());
+        }
+        return { key, id: pendingRequestIds.get(key) };
+    }
+
+    async function refreshBanking() {
+        const child = selectedChild();
+        if (!child) {
+            bankingPanel.hidden = true;
+            return;
+        }
+
+        const [childResult, transactionResult] = await Promise.all([
+            client.from('children')
+                .select('id, child_name, first_name, last_name, school, checking_balance, savings_balance, allowance')
+                .eq('id', child.id)
+                .single(),
+            client.from('transactions')
+                .select('id, child_id, amount, type, notes, created_at, account, category, title, reverses_transaction_id')
+                .eq('child_id', child.id)
+                .order('created_at', { ascending: false })
+                .limit(100)
+        ]);
+        if (childResult.error) throw childResult.error;
+        if (transactionResult.error) throw transactionResult.error;
+
+        Object.assign(child, childResult.data);
+        document.getElementById('cloud-selected-child-name').textContent =
+            [child.first_name, child.last_name].filter(Boolean).join(' ') || child.child_name || 'Child profile';
+        document.getElementById('cloud-selected-child-school').textContent = child.school || '';
+        document.getElementById('cloud-checking-balance').textContent = money(child.checking_balance);
+        document.getElementById('cloud-savings-balance').textContent = money(child.savings_balance);
+        const allowance = child.allowance || {};
+        document.getElementById('cloud-allowance-amount').value = allowance.amount || 10;
+        document.getElementById('cloud-allowance-savings').value =
+            Number.isInteger(Number(allowance.savingsRatioPercent)) ? allowance.savingsRatioPercent : 30;
+        renderTransactions(transactionResult.data || []);
+        bankingPanel.hidden = false;
+        renderChildren(children);
+    }
+
+    function renderTransactions(transactions) {
+        transactionList.replaceChildren();
+        if (!transactions.length) {
+            addText(transactionList, 'p', 'cloud-help', 'No banking activity yet.');
+            return;
+        }
+
+        const reversedIds = new Set(
+            transactions.map((item) => item.reverses_transaction_id).filter(Boolean)
+        );
+        transactions.forEach((transaction) => {
+            const row = document.createElement('article');
+            row.className = 'cloud-transaction-row';
+            const details = document.createElement('div');
+            const title = transaction.title || transaction.type || 'Banking activity';
+            addText(details, 'strong', '', title);
+            const date = transaction.created_at
+                ? new Date(transaction.created_at).toLocaleString()
+                : '';
+            const account = transaction.account ? ` · ${transaction.account.replaceAll('_', ' ')}` : '';
+            addText(details, 'p', 'cloud-help', `${date}${account}`);
+            if (transaction.notes) addText(details, 'p', 'cloud-transaction-note', transaction.notes);
+            row.appendChild(details);
+
+            const amount = document.createElement('strong');
+            const prefix = `${transaction.reverses_transaction_id ? '↩ ' : ''}${
+                transaction.type === 'spend' ? '−' :
+                    transaction.type === 'deposit' || transaction.type === 'bonus' ? '+' : ''
+            }`;
+            amount.className = `cloud-transaction-amount ${transaction.type === 'spend' ? 'is-debit' : 'is-credit'}`;
+            amount.textContent = `${prefix}${money(transaction.amount)}`;
+            row.appendChild(amount);
+
+            const canReverse = ['spend', 'transfer', 'deposit', 'bonus'].includes(transaction.type)
+                && !transaction.reverses_transaction_id
+                && !reversedIds.has(transaction.id);
+            if (canReverse) {
+                const reverseButton = document.createElement('button');
+                reverseButton.type = 'button';
+                reverseButton.className = 'btn-secondary-action cloud-reverse-button';
+                reverseButton.textContent = 'Undo';
+                reverseButton.dataset.transactionId = transaction.id;
+                reverseButton.setAttribute('aria-label', `Undo ${title}`);
+                row.appendChild(reverseButton);
+            }
+            transactionList.appendChild(row);
+        });
+    }
+
+    async function runBankingAction(action, successMessage, requestKey = null) {
+        if (isBusy || !selectedChildId) return;
+        setBusy(true);
+        showMessage(document.getElementById('cloud-banking-message'), '');
+        try {
+            await action(selectedChildId);
+        } catch (error) {
+            showMessage(document.getElementById('cloud-banking-message'), bankingErrorMessage(error), true);
+            setBusy(false);
+            return false;
+        }
+
+        if (requestKey) pendingRequestIds.delete(requestKey);
+        try {
+            await refreshBanking();
+            showMessage(document.getElementById('cloud-banking-message'), successMessage);
+            return true;
+        } catch (error) {
+            showMessage(
+                document.getElementById('cloud-banking-message'),
+                `${successMessage} The operation was saved, but the latest balances could not be refreshed: ${bankingErrorMessage(error)} Use Refresh to reload.`,
+                true
+            );
+            return true;
+        } finally {
+            setBusy(false);
+        }
     }
 
     async function linkGuardian() {
@@ -114,18 +271,32 @@
         showMessage(familyMessage, '');
         try {
             await linkGuardian();
-            const { data: children, error } = await client
+            const { data: familyChildren, error } = await client
                 .from('children')
-                .select('id, child_name, first_name, last_name, school, checking_balance, savings_balance')
+                .select('id, child_name, first_name, last_name, school, checking_balance, savings_balance, allowance')
                 .order('created_at', { ascending: true });
             if (error) throw error;
 
             currentUser = user;
+            children = familyChildren || [];
+            if (!children.some((child) => child.id === selectedChildId)) {
+                selectedChildId = children[0]?.id || null;
+            }
             guardianEmail.textContent = user.email || '';
-            renderChildren(children || []);
+            renderChildren(children);
             authPanel.hidden = true;
             familyPanel.hidden = false;
             signOutButton.hidden = false;
+            try {
+                await refreshBanking();
+            } catch (error) {
+                bankingPanel.hidden = true;
+                showMessage(
+                    familyMessage,
+                    `Family profiles loaded, but banking is not ready: ${bankingErrorMessage(error)}`,
+                    true
+                );
+            }
             return true;
         } catch (error) {
             showSignedOut();
@@ -188,7 +359,7 @@
         const values = (id) => document.getElementById(id).value.trim();
         const dob = values('cloud-child-dob');
         try {
-            const { error } = await client.rpc('create_kids_bank_child', {
+            const { data: childId, error } = await client.rpc('create_kids_bank_child', {
                 p_first_name: values('cloud-child-first'),
                 p_last_name: values('cloud-child-last'),
                 p_school: values('cloud-child-school') || null,
@@ -200,6 +371,7 @@
                 p_parent2_last_name: values('cloud-parent2-last') || null
             });
             if (error) throw error;
+            selectedChildId = childId;
             childForm.reset();
             const familyLoaded = await loadFamily(currentUser);
             if (!familyLoaded) return;
@@ -209,6 +381,97 @@
         } finally {
             setBusy(false);
         }
+    });
+
+    childList.addEventListener('click', async (event) => {
+        const button = event.target.closest('button[data-child-id]');
+        if (!button || isBusy || button.dataset.childId === selectedChildId) return;
+        selectedChildId = button.dataset.childId;
+        renderChildren(children);
+        setBusy(true);
+        showMessage(document.getElementById('cloud-banking-message'), '');
+        try {
+            await refreshBanking();
+        } catch (error) {
+            showMessage(document.getElementById('cloud-banking-message'), error.message, true);
+        } finally {
+            setBusy(false);
+        }
+    });
+
+    document.getElementById('cloud-refresh-bank').addEventListener('click', () => {
+        runBankingAction(async () => {}, 'Balances and activity refreshed.');
+    });
+
+    document.getElementById('cloud-spend-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const request = requestIdFor('spend');
+        runBankingAction((childId) => banking.spend(childId, {
+            amount: document.getElementById('cloud-spend-amount').value,
+            account: document.getElementById('cloud-spend-account').value,
+            category: document.getElementById('cloud-spend-category').value,
+            title: document.getElementById('cloud-spend-title').value,
+            requestId: request.id
+        }), 'Purchase recorded.', request.key).then((success) => { if (success) form.reset(); });
+    });
+
+    document.getElementById('cloud-transfer-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const request = requestIdFor('transfer');
+        runBankingAction((childId) => banking.transfer(childId, {
+            amount: document.getElementById('cloud-transfer-amount').value,
+            fromAccount: document.getElementById('cloud-transfer-from').value,
+            toAccount: document.getElementById('cloud-transfer-to').value,
+            requestId: request.id
+        }), 'Transfer completed.', request.key).then((success) => { if (success) form.reset(); });
+    });
+
+    document.getElementById('cloud-credit-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const request = requestIdFor('credit');
+        runBankingAction((childId) => banking.credit(childId, {
+            amount: document.getElementById('cloud-credit-amount').value,
+            account: document.getElementById('cloud-credit-account').value,
+            bonus: document.getElementById('cloud-credit-kind').value === 'bonus',
+            title: document.getElementById('cloud-credit-title').value,
+            requestId: request.id
+        }), 'Guardian credit added.', request.key).then((success) => { if (success) form.reset(); });
+    });
+
+    document.getElementById('cloud-allowance-config-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const amount = document.getElementById('cloud-allowance-amount').value;
+        const savingsPercent = document.getElementById('cloud-allowance-savings').value;
+        await runBankingAction(async (childId) => {
+            await banking.setAllowance(childId, amount, savingsPercent);
+        }, 'Allowance settings saved.');
+    });
+
+    document.getElementById('cloud-allowance-pay-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const note = document.getElementById('cloud-allowance-note').value;
+        const request = requestIdFor('allowance');
+        runBankingAction(
+            (childId) => banking.payAllowance(childId, note, request.id),
+            'Monthly allowance paid.',
+            request.key
+        );
+    });
+
+    transactionList.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-transaction-id]');
+        if (!button || isBusy) return;
+        const confirmed = window.confirm('Undo this transaction? This will create a reversal entry in the ledger.');
+        if (!confirmed) return;
+        const request = requestIdFor(`reverse:${button.dataset.transactionId}`);
+        runBankingAction(
+            (childId) => banking.reverse(childId, button.dataset.transactionId, request.id),
+            'Transaction reversed.',
+            request.key
+        );
     });
 
     signOutButton.addEventListener('click', async () => {

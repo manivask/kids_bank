@@ -34,11 +34,12 @@ jobs:
         run: |
           node --check js/app.js
           node --check js/data-store.js
+          node --check js/banking-client.js
           node --check js/guardian-portal.js
           node --check js/supabase-config.js
 
-      - name: Run registration tests
-        run: node --test tests/registration.test.cjs
+      - name: Run Kids Bank tests
+        run: node --test tests/registration.test.cjs tests/banking-client.test.cjs tests/guardian-banking-migration.test.cjs
 
       - name: Generate Supabase public client config
         env:

@@ -1652,6 +1652,21 @@ html[data-app-mode="supabase"] .app-viewport {
     background: #F8FAFC;
 }
 
+.cloud-child-select {
+    width: 100%;
+    text-align: left;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.cloud-child-select:hover,
+.cloud-child-select.selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.12);
+    transform: translateY(-1px);
+}
+
 .cloud-child-card h2 {
     margin: 0;
     font-family: var(--font-heading);
@@ -1662,10 +1677,166 @@ html[data-app-mode="supabase"] .app-viewport {
     margin: 0.4rem 0;
 }
 
+.cloud-child-select-hint {
+    display: inline-block;
+    margin-top: 0.65rem;
+    color: var(--primary);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
 .cloud-balance {
     margin: 0.75rem 0 0;
     color: var(--primary-dark);
     font-weight: 700;
+}
+
+.cloud-banking-panel {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: #FFFFFF;
+}
+
+.cloud-banking-panel[hidden] {
+    display: none;
+}
+
+.cloud-bank-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cloud-bank-heading h2 {
+    margin: 0;
+    font-family: var(--font-heading);
+}
+
+.cloud-bank-heading .cloud-help {
+    margin: 0.25rem 0 0;
+}
+
+.cloud-balance-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 1.25rem 0;
+}
+
+.cloud-balance-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.1rem;
+    border-radius: var(--radius-md);
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.cloud-balance-card strong {
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+}
+
+.cloud-wallet-card {
+    background: var(--wallet-gradient);
+}
+
+.cloud-savings-card {
+    background: var(--piggy-gradient);
+}
+
+.cloud-banking-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.cloud-action-card {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: #F8FAFC;
+}
+
+.cloud-action-card h3,
+.cloud-activity h3 {
+    margin: 0 0 0.8rem;
+    font-family: var(--font-heading);
+}
+
+.cloud-action-card .form-label {
+    display: block;
+    margin: 0.7rem 0 0.3rem;
+}
+
+.cloud-action-card .form-input,
+.cloud-action-card .form-select {
+    margin-bottom: 0.25rem;
+}
+
+.cloud-action-card .btn-primary-action,
+.cloud-action-card .btn-secondary-action {
+    width: 100%;
+    margin-top: 0.9rem;
+}
+
+.cloud-allowance-pay {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.cloud-action-card .cloud-help {
+    margin: 0.75rem 0 0;
+    font-size: 0.85rem;
+}
+
+.cloud-activity {
+    margin-top: 1.5rem;
+}
+
+.cloud-transaction-list {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.cloud-transaction-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: #FFFFFF;
+}
+
+.cloud-transaction-row .cloud-help,
+.cloud-transaction-note {
+    margin: 0.2rem 0 0;
+    font-size: 0.82rem;
+    overflow-wrap: anywhere;
+}
+
+.cloud-transaction-amount {
+    white-space: nowrap;
+}
+
+.cloud-transaction-amount.is-debit {
+    color: #B91C1C;
+}
+
+.cloud-transaction-amount.is-credit {
+    color: #166534;
+}
+
+.cloud-reverse-button {
+    padding: 0.45rem 0.75rem;
 }
 
 .cloud-add-child {
@@ -1707,5 +1878,33 @@ html[data-app-mode="supabase"] .app-viewport {
 
     .cloud-family {
         padding: 1rem;
+    }
+
+    .cloud-banking-panel {
+        padding: 0.85rem;
+    }
+
+    .cloud-banking-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cloud-balance-grid {
+        gap: 0.65rem;
+    }
+
+    .cloud-balance-card {
+        padding: 0.85rem;
+    }
+
+    .cloud-balance-card strong {
+        font-size: 1.35rem;
+    }
+
+    .cloud-transaction-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .cloud-transaction-row .cloud-reverse-button {
+        grid-column: 1 / -1;
     }
 }

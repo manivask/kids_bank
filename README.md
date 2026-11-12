@@ -69,8 +69,8 @@ Open in browser:
 
 The GitHub Pages build can run in either demo mode (the existing local-storage app)
 or Supabase mode. Supabase mode provides guardian sign-up/sign-in and guardian-owned
-child profiles. It does not enable child PIN login, banking transactions, or balance
-changes. Do not use real children's information until the project configuration and
+child profiles and simulated banking actions. Child PIN login is not enabled. Do not
+use real children's information until database migrations, access controls, and
 account flows have been validated with synthetic data.
 
 The existing Supabase project has `users`, `children`, and `transactions` tables.
@@ -83,12 +83,26 @@ The reviewed schema showed RLS enabled but no policies, and a legacy
 - Replaces API table-wide grants with column-level grants so app clients cannot read the legacy PIN.
 - Does not seed demo data or copy, hash, or otherwise use existing PIN values.
 
-The first migration has been applied. Apply
+The first two migrations have been applied. Apply
 [`supabase/migrations/20261107000000_create_child_rpc.sql`](./supabase/migrations/20261107000000_create_child_rpc.sql)
-through the Supabase SQL Editor before using child-profile creation. It adds a
+through the Supabase SQL Editor if it has not already been applied. It adds a
 guardian-authorized RPC that creates a child profile and its welcome ledger entries
-atomically, deriving ownership from the signed-in guardian link. The frontend does
-not read or write child PINs.
+atomically, deriving ownership from the signed-in guardian link.
+
+Apply
+[`supabase/migrations/20261108000000_guardian_banking.sql`](./supabase/migrations/20261108000000_guardian_banking.sql)
+to enable guardian-managed simulated banking. It backfills missing wallet balances,
+removes direct client write grants to child and transaction records, and adds
+guardian-authorized atomic RPCs for spending, transfers, credits, chore bonuses,
+monthly allowance settings/payments, and transaction reversals. Every operation
+locks the child row, checks ownership and available funds, writes the ledger, and
+updates balances in the same database transaction. An idempotency key protects
+against accidental duplicate submissions. Allowances are paid manually; there is
+no automatic scheduler.
+
+The connected portal displays child balances and recent activity and provides
+guardian actions. The wallet amounts are simulated learning balances, not real bank
+accounts. Child PIN access remains disabled; the frontend never reads or writes PINs.
 
 To enable Supabase mode on GitHub Pages:
 
@@ -101,6 +115,3 @@ To enable Supabase mode on GitHub Pages:
 3. Rerun the Pages workflow or push to `main`. Without the variable, the site stays
    in demo mode. With the variable configured, Supabase errors are shown and the
    app does not fall back to local storage.
-
-Money movement remains disabled in this connected preview until dedicated atomic,
-guardian-authorized database operations are implemented and tested.

@@ -63,6 +63,107 @@
                 </div>
                 <p id="cloud-family-message" class="cloud-message" role="status" aria-live="polite"></p>
                 <div id="cloud-child-list" class="cloud-child-list"></div>
+                <section id="cloud-banking-panel" class="cloud-banking-panel" hidden>
+                    <div class="cloud-bank-heading">
+                        <div>
+                            <h2 id="cloud-selected-child-name"></h2>
+                            <p id="cloud-selected-child-school" class="cloud-help"></p>
+                        </div>
+                        <button type="button" class="btn-secondary-action" id="cloud-refresh-bank">Refresh</button>
+                    </div>
+                    <div class="cloud-balance-grid">
+                        <article class="cloud-balance-card cloud-wallet-card">
+                            <span>Wallet</span>
+                            <strong id="cloud-checking-balance">$0.00</strong>
+                        </article>
+                        <article class="cloud-balance-card cloud-savings-card">
+                            <span>Piggy Bank</span>
+                            <strong id="cloud-savings-balance">$0.00</strong>
+                        </article>
+                    </div>
+                    <p id="cloud-banking-message" class="cloud-message" role="status" aria-live="polite"></p>
+                    <div class="cloud-banking-grid">
+                        <form id="cloud-spend-form" class="cloud-action-card">
+                            <h3>Record a Purchase</h3>
+                            <label class="form-label" for="cloud-spend-amount">Amount</label>
+                            <input class="form-input" id="cloud-spend-amount" type="number" min="0.01" step="0.01" required>
+                            <label class="form-label" for="cloud-spend-account">Pay from</label>
+                            <select class="form-select" id="cloud-spend-account">
+                                <option value="checking">Wallet</option>
+                                <option value="savings">Piggy Bank</option>
+                            </select>
+                            <label class="form-label" for="cloud-spend-category">Category</label>
+                            <select class="form-select" id="cloud-spend-category">
+                                <option value="toys">Toys</option>
+                                <option value="snacks">Snacks</option>
+                                <option value="games">Games</option>
+                                <option value="books">Books</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <label class="form-label" for="cloud-spend-title">Purchase</label>
+                            <input class="form-input" id="cloud-spend-title" maxlength="100" required>
+                            <button class="btn-primary-action" type="submit">Record Purchase</button>
+                        </form>
+
+                        <form id="cloud-transfer-form" class="cloud-action-card">
+                            <h3>Move Money</h3>
+                            <label class="form-label" for="cloud-transfer-amount">Amount</label>
+                            <input class="form-input" id="cloud-transfer-amount" type="number" min="0.01" step="0.01" required>
+                            <label class="form-label" for="cloud-transfer-from">Move from</label>
+                            <select class="form-select" id="cloud-transfer-from">
+                                <option value="checking">Wallet</option>
+                                <option value="savings">Piggy Bank</option>
+                            </select>
+                            <label class="form-label" for="cloud-transfer-to">Move to</label>
+                            <select class="form-select" id="cloud-transfer-to">
+                                <option value="savings">Piggy Bank</option>
+                                <option value="checking">Wallet</option>
+                            </select>
+                            <button class="btn-primary-action" type="submit">Transfer</button>
+                        </form>
+
+                        <form id="cloud-credit-form" class="cloud-action-card">
+                            <h3>Guardian Credit or Bonus</h3>
+                            <label class="form-label" for="cloud-credit-amount">Amount</label>
+                            <input class="form-input" id="cloud-credit-amount" type="number" min="0.01" step="0.01" required>
+                            <label class="form-label" for="cloud-credit-kind">Credit type</label>
+                            <select class="form-select" id="cloud-credit-kind">
+                                <option value="credit">Guardian credit</option>
+                                <option value="bonus">Chore / activity bonus</option>
+                            </select>
+                            <label class="form-label" for="cloud-credit-account">Deposit into</label>
+                            <select class="form-select" id="cloud-credit-account">
+                                <option value="checking">Wallet</option>
+                                <option value="savings">Piggy Bank</option>
+                            </select>
+                            <label class="form-label" for="cloud-credit-title">Reason</label>
+                            <input class="form-input" id="cloud-credit-title" maxlength="100" required>
+                            <button class="btn-primary-action" type="submit">Add Credit</button>
+                        </form>
+
+                        <section class="cloud-action-card">
+                            <h3>Monthly Allowance</h3>
+                            <form id="cloud-allowance-config-form">
+                                <label class="form-label" for="cloud-allowance-amount">Allowance amount</label>
+                                <input class="form-input" id="cloud-allowance-amount" type="number" min="0.01" step="0.01" required>
+                                <label class="form-label" for="cloud-allowance-savings">Savings share (%)</label>
+                                <input class="form-input" id="cloud-allowance-savings" type="number" min="0" max="100" step="1" required>
+                                <button class="btn-secondary-action" type="submit">Save Allowance Settings</button>
+                            </form>
+                            <form id="cloud-allowance-pay-form" class="cloud-allowance-pay">
+                                <label class="form-label" for="cloud-allowance-note">Payment note (optional)</label>
+                                <input class="form-input" id="cloud-allowance-note" maxlength="150">
+                                <button class="btn-primary-action" type="submit">Pay Monthly Allowance</button>
+                            </form>
+                            <p class="cloud-help">Allowance payments are manual; they are not scheduled automatically.</p>
+                        </section>
+                    </div>
+
+                    <section class="cloud-activity">
+                        <h3>Recent Activity</h3>
+                        <div id="cloud-transaction-list" class="cloud-transaction-list"></div>
+                    </section>
+                </section>
                 <details class="cloud-add-child">
                     <summary class="btn-primary-action">Add a Child Profile</summary>
                     <form id="cloud-child-form">
@@ -115,7 +216,7 @@
                         <button class="btn-primary-action" id="cloud-child-submit" type="submit">Create Child Profile</button>
                     </form>
                 </details>
-                <p class="cloud-notice">This Supabase preview currently supports guardian authentication and child profiles. Banking activity and balance changes are not enabled in this connected mode yet.</p>
+                <p class="cloud-notice">Balances in this learning app are simulated, not connected to a bank. Guardians can manage child profiles, record purchases, transfer funds between app wallets, issue credits or bonuses, and pay configured allowances. Child PIN sign-in is not enabled.</p>
             </section>
         </div>
     </main>
@@ -887,6 +988,7 @@
     <script src="js/app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js"></script>
     <script src="js/supabase-config.js"></script>
+    <script src="js/banking-client.js"></script>
     <script src="js/guardian-portal.js"></script>
 </body>
 </html>
