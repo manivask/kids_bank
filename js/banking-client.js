@@ -30,6 +30,35 @@
     }
 
     function createBankingApi(client, createRequestId = () => globalThis.crypto.randomUUID()) {
+        async function childTransaction(sessionToken, operation, values) {
+            if (!['spend', 'transfer'].includes(operation)) {
+                throw new Error('Unsupported child banking operation.');
+            }
+            if (operation === 'spend') requireAccount(values.account);
+            if (operation === 'transfer') {
+                requireAccount(values.fromAccount, 'Source account');
+                requireAccount(values.toAccount, 'Destination account');
+                if (values.fromAccount === values.toAccount) {
+                    throw new Error('Choose different source and destination accounts.');
+                }
+            }
+
+            const { data, error } = await client.rpc('kids_bank_child_transaction', {
+                p_session_token: requireId(sessionToken, 'Child session'),
+                p_operation: operation,
+                p_request_id: requireId(values.requestId || createRequestId(), 'Transaction request'),
+                p_amount: positiveAmount(values.amount),
+                p_account: values.account ?? null,
+                p_from_account: values.fromAccount ?? null,
+                p_to_account: values.toAccount ?? null,
+                p_title: values.title?.trim() || null,
+                p_category: values.category?.trim() || null
+            });
+            if (error) throw error;
+            if (!data) throw new Error('The banking operation returned no transaction ID.');
+            return data;
+        }
+
         async function apply(childId, operation, values = {}) {
             const { data, error } = await client.rpc('kids_bank_apply_transaction', {
                 p_child_id: requireId(childId, 'Child profile'),
@@ -50,6 +79,64 @@
         }
 
         return {
+            async signInChild(username, pin) {
+                const normalizedUsername = String(username || '').trim().toLowerCase();
+                if (!/^[a-z0-9][a-z0-9._-]{2,23}$/.test(normalizedUsername)) {
+                    throw new Error('Enter a valid username.');
+                }
+                if (!/^[0-9]{6}$/.test(String(pin || ''))) {
+                    throw new Error('PIN must contain exactly 6 digits.');
+                }
+                const { data, error } = await client.rpc('kids_bank_child_sign_in', {
+                    p_username: normalizedUsername,
+                    p_pin: String(pin)
+                });
+                if (error) throw error;
+                if (!data?.ok || !data.session_token) {
+                    throw new Error(data?.message || 'Username or PIN is incorrect.');
+                }
+                return data;
+            },
+            childDashboard(sessionToken) {
+                return client.rpc('kids_bank_child_dashboard', {
+                    p_session_token: requireId(sessionToken, 'Child session')
+                }).then(({ data, error }) => {
+                    if (error) throw error;
+                    if (!data?.child) throw new Error('Child dashboard data is unavailable.');
+                    return data;
+                });
+            },
+            childSignOut(sessionToken) {
+                return client.rpc('kids_bank_child_sign_out', {
+                    p_session_token: requireId(sessionToken, 'Child session')
+                }).then(({ data, error }) => {
+                    if (error) throw error;
+                    return data;
+                });
+            },
+            setChildLogin(childId, username, pin) {
+                const normalizedUsername = String(username || '').trim().toLowerCase();
+                if (!/^[a-z0-9][a-z0-9._-]{2,23}$/.test(normalizedUsername)) {
+                    throw new Error('Username must be 3 to 24 letters, numbers, dots, underscores, or hyphens.');
+                }
+                if (!/^[0-9]{6}$/.test(String(pin || ''))) {
+                    throw new Error('Child PIN must contain exactly 6 digits.');
+                }
+                return client.rpc('kids_bank_set_child_login', {
+                    p_child_id: requireId(childId, 'Child profile'),
+                    p_username: normalizedUsername,
+                    p_pin: String(pin)
+                }).then(({ data, error }) => {
+                    if (error) throw error;
+                    return data;
+                });
+            },
+            childSpend(sessionToken, values) {
+                return childTransaction(sessionToken, 'spend', values);
+            },
+            childTransfer(sessionToken, values) {
+                return childTransaction(sessionToken, 'transfer', values);
+            },
             spend(childId, values) {
                 requireAccount(values.account);
                 return apply(childId, 'spend', {

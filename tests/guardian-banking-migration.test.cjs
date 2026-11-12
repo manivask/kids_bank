@@ -12,6 +12,10 @@ const readGrantsMigration = fs.readFileSync(
     path.join(root, 'supabase', 'migrations', '20261109000000_restore_guardian_banking_reads.sql'),
     'utf8'
 );
+const childLoginMigration = fs.readFileSync(
+    path.join(root, 'supabase', 'migrations', '20261110000000_child_login.sql'),
+    'utf8'
+);
 
 test('banking RPCs serialize on the owned child and write balances with the ledger', () => {
     assert.match(migration, /for update of c/i);
@@ -54,4 +58,27 @@ test('guardian portal references existing unique markup IDs', () => {
 
     assert.deepEqual([...new Set(duplicateIds)], []);
     assert.deepEqual([...new Set(missingIds)], []);
+});
+
+test('child PINs are hashed and child RPCs expose only scoped data and actions', () => {
+    assert.match(childLoginMigration, /kid_pin_hash\s*=\s*extensions\.crypt\(p_pin,\s*extensions\.gen_salt\('bf'/i);
+    assert.match(childLoginMigration, /lower\(c\.kid_username\)\s*=\s*normalized_username/i);
+    assert.match(childLoginMigration, /kids_bank_child_login_attempts/i);
+    assert.match(childLoginMigration, /current_attempts\s*>=\s*5/i);
+    assert.match(childLoginMigration, /kids_bank_child_sessions[\s\S]*?token_hash text primary key/i);
+    assert.match(childLoginMigration, /digest\(session_token,\s*'sha256'\)/i);
+    assert.match(childLoginMigration, /session_expiry timestamptz := now\(\) \+ interval '12 hours'/i);
+    assert.match(childLoginMigration, /from public\.kids_bank_guardian_links l/i);
+    assert.match(childLoginMigration, /l\.auth_user_id = current_auth_id/i);
+    assert.match(childLoginMigration, /'checkingBalance', c\.checking_balance[\s\S]*?'savingsBalance', c\.savings_balance/i);
+    const childDashboard = childLoginMigration.match(/create or replace function public\.kids_bank_child_dashboard[\s\S]*?create or replace function public\.kids_bank_child_transaction/i)?.[0] || '';
+    assert.match(childDashboard, /'parent1FirstName', c\.parent1_first_name/i);
+    assert.match(childDashboard, /'parent2LastName', c\.parent2_last_name/i);
+    assert.doesNotMatch(childDashboard, /kid_pin_hash|parent_id|email|auth_user_id/i);
+    assert.match(childLoginMigration, /if p_operation = 'spend'[\s\S]*?elsif p_operation = 'transfer'/i);
+    assert.doesNotMatch(childLoginMigration, /p_operation\s*=\s*'(credit|bonus|allowance|reverse)'/i);
+    assert.match(childLoginMigration, /grant execute on function public\.kids_bank_child_sign_in\(text, text\)\s+to anon, authenticated/i);
+    assert.match(childLoginMigration, /grant execute on function public\.kids_bank_child_transaction\([\s\S]*?\)\s+to anon, authenticated/i);
+    assert.match(childLoginMigration, /revoke all on public\.kids_bank_child_login_attempts, public\.kids_bank_child_sessions\s+from public, anon, authenticated/i);
+    assert.doesNotMatch(childLoginMigration, /grant select \([^)]*kid_pin_hash/i);
 });

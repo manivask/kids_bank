@@ -3,8 +3,11 @@
     const supabaseSdk = window.supabase;
     const cloudApp = document.getElementById('cloud-app');
     const authPanel = document.getElementById('cloud-auth-panel');
+    const kidAuthPanel = document.getElementById('cloud-kid-auth-panel');
+    const kidPanel = document.getElementById('cloud-kid-panel');
     const familyPanel = document.getElementById('cloud-family-panel');
     const authForm = document.getElementById('cloud-auth-form');
+    const kidAuthForm = document.getElementById('cloud-kid-auth-form');
     const childForm = document.getElementById('cloud-child-form');
 
     if (!config || !config.url || !config.publishableKey) return;
@@ -25,6 +28,7 @@
     const guardianEmail = document.getElementById('cloud-guardian-email');
     const bankingPanel = document.getElementById('cloud-banking-panel');
     const transactionList = document.getElementById('cloud-transaction-list');
+    const kidTransactionList = document.getElementById('cloud-kid-transaction-list');
 
     if (!supabaseSdk || typeof supabaseSdk.createClient !== 'function') {
         authPanel.hidden = false;
@@ -45,6 +49,10 @@
     let currentUser = null;
     let children = [];
     let selectedChildId = null;
+    let childLoginMigrationApplied = true;
+    let childSessionToken = null;
+    let childDashboardData = null;
+    let isEnteringKidMode = false;
     let isBusy = false;
     const pendingRequestIds = new Map();
 
@@ -55,6 +63,9 @@
 
     function bankingErrorMessage(error) {
         const message = error?.message || String(error);
+        if (/kids_bank_(child_sign_in|child_dashboard|child_transaction|child_sign_out|set_child_login)|kid_username/i.test(message)) {
+            return `${message} Apply supabase/migrations/20261110000000_child_login.sql in the Supabase SQL Editor, then retry.`;
+        }
         if (/kids_bank_(apply_transaction|set_allowance)|schema cache|reverses_transaction_id|operation_id/i.test(message)) {
             return `${message} Apply supabase/migrations/20261108000000_guardian_banking.sql in the Supabase SQL Editor, then retry.`;
         }
@@ -63,8 +74,16 @@
 
     function setBusy(busy) {
         isBusy = busy;
-        document.querySelectorAll('#cloud-auth-form button, #cloud-family-panel button')
+        document.querySelectorAll('#cloud-auth-form button, #cloud-kid-auth-form button, #cloud-family-panel button, #cloud-kid-panel button')
             .forEach((button) => { button.disabled = busy; });
+    }
+
+    function setChildLoginAvailability(available) {
+        childLoginMigrationApplied = available;
+        document.getElementById('cloud-child-login-form').hidden = !available;
+        document.getElementById('cloud-new-kid-credentials').hidden = !available;
+        document.getElementById('cloud-new-kid-username').required = available;
+        document.getElementById('cloud-new-kid-pin').required = available;
     }
 
     function setAuthMode(signUp) {
@@ -82,15 +101,117 @@
     function showSignedOut() {
         currentUser = null;
         authPanel.hidden = false;
+        kidAuthPanel.hidden = true;
+        kidPanel.hidden = true;
         familyPanel.hidden = true;
         signOutButton.hidden = true;
+        signOutButton.textContent = 'Sign out';
         bankingPanel.hidden = true;
         children = [];
         selectedChildId = null;
         pendingRequestIds.clear();
         childList.replaceChildren();
         transactionList.replaceChildren();
+        kidTransactionList.replaceChildren();
         showMessage(document.getElementById('cloud-banking-message'), '');
+    }
+
+    function showKidSignIn(message = '', isError = false) {
+        authPanel.hidden = true;
+        familyPanel.hidden = true;
+        kidPanel.hidden = true;
+        kidAuthPanel.hidden = false;
+        signOutButton.hidden = true;
+        signOutButton.textContent = 'Sign out';
+        showMessage(document.getElementById('cloud-kid-auth-message'), message, isError);
+    }
+
+    function showGuardianSignIn() {
+        childSessionToken = null;
+        childDashboardData = null;
+        sessionStorage.removeItem('kidsBankChildSession');
+        showSignedOut();
+    }
+
+    function renderKidTransactions(transactions) {
+        kidTransactionList.replaceChildren();
+        if (!transactions.length) {
+            addText(kidTransactionList, 'p', 'cloud-help', 'No banking activity yet.');
+            return;
+        }
+
+        transactions.forEach((transaction) => {
+            const row = document.createElement('article');
+            row.className = 'cloud-transaction-row';
+            const details = document.createElement('div');
+            addText(details, 'strong', '', transaction.title || transaction.type || 'Banking activity');
+            const date = transaction.createdAt ? new Date(transaction.createdAt).toLocaleString() : '';
+            const account = transaction.account ? ` · ${transaction.account.replaceAll('_', ' ')}` : '';
+            addText(details, 'p', 'cloud-help', `${date}${account}`);
+            if (transaction.notes) addText(details, 'p', 'cloud-transaction-note', transaction.notes);
+            row.appendChild(details);
+
+            const amount = document.createElement('strong');
+            const isDebit = transaction.type === 'spend';
+            amount.className = `cloud-transaction-amount ${isDebit ? 'is-debit' : 'is-credit'}`;
+            amount.textContent = `${isDebit ? '−' : '+'}${money(transaction.amount)}`;
+            row.appendChild(amount);
+            kidTransactionList.appendChild(row);
+        });
+    }
+
+    async function loadKidDashboard(sessionToken) {
+        const data = await banking.childDashboard(sessionToken);
+        childSessionToken = sessionToken;
+        childDashboardData = data;
+        sessionStorage.setItem('kidsBankChildSession', sessionToken);
+        const child = data.child;
+        const name = [child.firstName, child.lastName].filter(Boolean).join(' ') || child.name || 'friend';
+        document.getElementById('cloud-kid-name').textContent = name;
+        document.getElementById('cloud-kid-school').textContent = child.school || '';
+        document.getElementById('cloud-kid-avatar').textContent = child.avatar || '';
+        const parentNames = [
+            [child.parent1FirstName, child.parent1LastName].filter(Boolean).join(' '),
+            [child.parent2FirstName, child.parent2LastName].filter(Boolean).join(' ')
+        ].filter(Boolean);
+        const parentMessage = document.getElementById('cloud-kid-parents');
+        parentMessage.hidden = parentNames.length === 0;
+        parentMessage.textContent = parentNames.length ? `My family: ${parentNames.join(' and ')}` : '';
+        document.getElementById('cloud-kid-checking-balance').textContent = money(child.checkingBalance);
+        document.getElementById('cloud-kid-savings-balance').textContent = money(child.savingsBalance);
+        renderKidTransactions(data.transactions || []);
+        authPanel.hidden = true;
+        kidAuthPanel.hidden = true;
+        familyPanel.hidden = true;
+        kidPanel.hidden = false;
+        signOutButton.hidden = false;
+        signOutButton.textContent = 'Kid sign out';
+        showMessage(document.getElementById('cloud-kid-message'), '');
+    }
+
+    async function runKidAction(action, successMessage, requestKey) {
+        if (isBusy || !childSessionToken) return false;
+        setBusy(true);
+        showMessage(document.getElementById('cloud-kid-message'), '');
+        try {
+            await action();
+            if (requestKey) pendingRequestIds.delete(requestKey);
+            await loadKidDashboard(childSessionToken);
+            showMessage(document.getElementById('cloud-kid-message'), successMessage);
+            return true;
+        } catch (error) {
+            if (/child session expired/i.test(error?.message || '')) {
+                sessionStorage.removeItem('kidsBankChildSession');
+                childSessionToken = null;
+                childDashboardData = null;
+                showKidSignIn('Your session expired. Please sign in again.');
+            } else {
+                showMessage(document.getElementById('cloud-kid-message'), bankingErrorMessage(error), true);
+            }
+            return false;
+        } finally {
+            setBusy(false);
+        }
     }
 
     function addText(parent, tag, className, text) {
@@ -124,6 +245,11 @@
                 'cloud-balance',
                 `Wallet: $${Number(child.checking_balance || 0).toFixed(2)} · Piggy Bank: $${Number(child.savings_balance || 0).toFixed(2)}`
             );
+            addText(card, 'p', 'cloud-help', child.kid_username
+                ? `Kid username: ${child.kid_username}`
+                : childLoginMigrationApplied
+                    ? 'Kid sign-in is not set up yet'
+                    : 'Apply the child-login migration to enable kid sign-in');
             addText(card, 'span', 'cloud-child-select-hint',
                 child.id === selectedChildId ? 'Selected account' : 'Manage account');
             childList.appendChild(card);
@@ -155,7 +281,7 @@
 
         const [childResult, transactionResult] = await Promise.all([
             client.from('children')
-                .select('id, child_name, first_name, last_name, school, checking_balance, savings_balance, allowance')
+                .select(`id, child_name, first_name, last_name, school, checking_balance, savings_balance, allowance${childLoginMigrationApplied ? ', kid_username' : ''}`)
                 .eq('id', child.id)
                 .single(),
             client.from('transactions')
@@ -171,6 +297,7 @@
         document.getElementById('cloud-selected-child-name').textContent =
             [child.first_name, child.last_name].filter(Boolean).join(' ') || child.child_name || 'Child profile';
         document.getElementById('cloud-selected-child-school').textContent = child.school || '';
+        document.getElementById('cloud-login-username').value = child.kid_username || '';
         document.getElementById('cloud-checking-balance').textContent = money(child.checking_balance);
         document.getElementById('cloud-savings-balance').textContent = money(child.savings_balance);
         const allowance = child.allowance || {};
@@ -271,10 +398,26 @@
         showMessage(familyMessage, '');
         try {
             await linkGuardian();
-            const { data: familyChildren, error } = await client
+            let { data: familyChildren, error } = await client
                 .from('children')
-                .select('id, child_name, first_name, last_name, school, checking_balance, savings_balance, allowance')
+                .select('id, child_name, first_name, last_name, school, checking_balance, savings_balance, allowance, kid_username')
                 .order('created_at', { ascending: true });
+            if (error && /kid_username|42703/i.test(`${error.code || ''} ${error.message || ''}`)) {
+                setChildLoginAvailability(false);
+                ({ data: familyChildren, error } = await client
+                    .from('children')
+                    .select('id, child_name, first_name, last_name, school, checking_balance, savings_balance, allowance')
+                    .order('created_at', { ascending: true }));
+                if (!error) {
+                    showMessage(
+                        familyMessage,
+                        'Kid sign-in is unavailable until supabase/migrations/20261110000000_child_login.sql is applied.',
+                        true
+                    );
+                }
+            } else if (!error) {
+                setChildLoginAvailability(true);
+            }
             if (error) throw error;
 
             currentUser = user;
@@ -287,6 +430,7 @@
             authPanel.hidden = true;
             familyPanel.hidden = false;
             signOutButton.hidden = false;
+            signOutButton.textContent = 'Sign out';
             try {
                 await refreshBanking();
             } catch (error) {
@@ -310,6 +454,73 @@
             setBusy(false);
         }
     }
+
+    document.getElementById('cloud-show-child-login').addEventListener('click', async () => {
+        if (isBusy) return;
+        setBusy(true);
+        isEnteringKidMode = true;
+        try {
+            const { data, error } = await client.auth.getSession();
+            if (error) throw error;
+            if (data.session) {
+                const { error: signOutError } = await client.auth.signOut();
+                if (signOutError) throw signOutError;
+            }
+            showKidSignIn();
+        } catch (error) {
+            showMessage(authMessage, error.message, true);
+        } finally {
+            isEnteringKidMode = false;
+            setBusy(false);
+        }
+    });
+
+    document.getElementById('cloud-show-guardian-login').addEventListener('click', async () => {
+        if (isBusy) return;
+        setBusy(true);
+        try {
+            if (childSessionToken) await banking.childSignOut(childSessionToken);
+            showGuardianSignIn();
+        } catch (error) {
+            showMessage(document.getElementById('cloud-kid-auth-message'), bankingErrorMessage(error), true);
+        } finally {
+            setBusy(false);
+        }
+    });
+
+    document.getElementById('cloud-family-kid-login').addEventListener('click', async () => {
+        if (isBusy) return;
+        setBusy(true);
+        isEnteringKidMode = true;
+        try {
+            const { error } = await client.auth.signOut();
+            if (error) throw error;
+            showKidSignIn();
+        } catch (error) {
+            showMessage(familyMessage, error.message, true);
+        } finally {
+            isEnteringKidMode = false;
+            setBusy(false);
+        }
+    });
+
+    kidAuthForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (isBusy) return;
+        setBusy(true);
+        showMessage(document.getElementById('cloud-kid-auth-message'), '');
+        try {
+            const username = document.getElementById('cloud-kid-username').value;
+            const pin = document.getElementById('cloud-kid-pin').value;
+            const result = await banking.signInChild(username, pin);
+            kidAuthForm.reset();
+            await loadKidDashboard(result.session_token);
+        } catch (error) {
+            showMessage(document.getElementById('cloud-kid-auth-message'), bankingErrorMessage(error), true);
+        } finally {
+            setBusy(false);
+        }
+    });
 
     authToggle.addEventListener('click', () => setAuthMode(!isSignUp));
 
@@ -372,15 +583,98 @@
             });
             if (error) throw error;
             selectedChildId = childId;
+            const username = values('cloud-new-kid-username');
+            const pin = values('cloud-new-kid-pin');
             childForm.reset();
+            if (childLoginMigrationApplied) {
+                try {
+                    await banking.setChildLogin(childId, username, pin);
+                } catch (loginError) {
+                    const familyLoaded = await loadFamily(currentUser);
+                    if (familyLoaded) {
+                        showMessage(
+                            familyMessage,
+                            `Child profile created, but kid sign-in could not be saved: ${loginError.message}`,
+                            true
+                        );
+                    }
+                    return;
+                }
+            }
             const familyLoaded = await loadFamily(currentUser);
             if (!familyLoaded) return;
-            showMessage(familyMessage, 'Child profile created.');
+            if (childLoginMigrationApplied) {
+                showMessage(familyMessage, 'Child profile and kid sign-in created.');
+            } else {
+                showMessage(
+                    familyMessage,
+                    'Child profile created. Apply supabase/migrations/20261110000000_child_login.sql to set up kid sign-in.'
+                );
+            }
         } catch (error) {
             showMessage(childError, error.message, true);
         } finally {
             setBusy(false);
         }
+    });
+
+    document.getElementById('cloud-child-login-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (isBusy || !currentUser || !selectedChildId) return;
+        setBusy(true);
+        showMessage(document.getElementById('cloud-banking-message'), '');
+        try {
+            await banking.setChildLogin(
+                selectedChildId,
+                document.getElementById('cloud-login-username').value,
+                document.getElementById('cloud-login-pin').value
+            );
+            document.getElementById('cloud-login-pin').value = '';
+            const child = selectedChild();
+            if (child) child.kid_username = document.getElementById('cloud-login-username').value.trim().toLowerCase();
+            renderChildren(children);
+            showMessage(
+                document.getElementById('cloud-banking-message'),
+                'Kid sign-in saved. Any previous kid session has been signed out.'
+            );
+        } catch (error) {
+            showMessage(document.getElementById('cloud-banking-message'), bankingErrorMessage(error), true);
+        } finally {
+            setBusy(false);
+        }
+    });
+
+    document.getElementById('cloud-kid-spend-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const childId = childDashboardData?.child?.id;
+        const key = `${childId}:kid-spend`;
+        if (!pendingRequestIds.has(key)) pendingRequestIds.set(key, window.crypto.randomUUID());
+        runKidAction(() => banking.childSpend(childSessionToken, {
+            amount: document.getElementById('cloud-kid-spend-amount').value,
+            account: document.getElementById('cloud-kid-spend-account').value,
+            category: 'spending',
+            title: document.getElementById('cloud-kid-spend-title').value,
+            requestId: pendingRequestIds.get(key)
+        }), 'Purchase recorded.', key).then((success) => { if (success) form.reset(); });
+    });
+
+    document.getElementById('cloud-kid-transfer-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const childId = childDashboardData?.child?.id;
+        const key = `${childId}:kid-transfer`;
+        if (!pendingRequestIds.has(key)) pendingRequestIds.set(key, window.crypto.randomUUID());
+        runKidAction(() => banking.childTransfer(childSessionToken, {
+            amount: document.getElementById('cloud-kid-transfer-amount').value,
+            fromAccount: document.getElementById('cloud-kid-transfer-from').value,
+            toAccount: document.getElementById('cloud-kid-transfer-to').value,
+            requestId: pendingRequestIds.get(key)
+        }), 'Transfer completed.', key).then((success) => { if (success) form.reset(); });
+    });
+
+    document.getElementById('cloud-kid-refresh').addEventListener('click', () => {
+        runKidAction(async () => {}, 'Balances and activity refreshed.');
     });
 
     childList.addEventListener('click', async (event) => {
@@ -478,18 +772,38 @@
         if (isBusy) return;
         setBusy(true);
         try {
+            if (childSessionToken) {
+                await banking.childSignOut(childSessionToken);
+                sessionStorage.removeItem('kidsBankChildSession');
+                childSessionToken = null;
+                childDashboardData = null;
+                pendingRequestIds.clear();
+                showKidSignIn('You are signed out.');
+                return;
+            }
             const { error } = await client.auth.signOut();
             if (error) throw error;
             showSignedOut();
             setAuthMode(false);
         } catch (error) {
-            showMessage(familyMessage, error.message, true);
+            showMessage(childSessionToken ? document.getElementById('cloud-kid-message') : familyMessage, error.message, true);
         } finally {
             setBusy(false);
         }
     });
 
-    client.auth.getSession().then(({ data, error }) => {
+    const storedChildSession = sessionStorage.getItem('kidsBankChildSession');
+    if (storedChildSession) {
+        loadKidDashboard(storedChildSession).catch((error) => {
+            sessionStorage.removeItem('kidsBankChildSession');
+            childSessionToken = null;
+            childDashboardData = null;
+            const message = /child session expired/i.test(error?.message || '')
+                ? 'Your session ended. Sign in again.'
+                : bankingErrorMessage(error);
+            showKidSignIn(message, true);
+        });
+    } else client.auth.getSession().then(({ data, error }) => {
         if (error) {
             showMessage(authMessage, error.message, true);
             return;
@@ -498,6 +812,8 @@
     }).catch((error) => showMessage(authMessage, error.message, true));
 
     client.auth.onAuthStateChange((event, session) => {
-        if (event === 'SIGNED_OUT' || !session) showSignedOut();
+        if ((event === 'SIGNED_OUT' || !session) && !isEnteringKidMode && !childSessionToken) {
+            showSignedOut();
+        }
     });
 })();

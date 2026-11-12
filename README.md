@@ -108,8 +108,27 @@ child and transaction columns, while keeping all direct writes revoked and the
 legacy child PIN inaccessible.
 
 The connected portal displays child balances and recent activity and provides
-guardian actions. The wallet amounts are simulated learning balances, not real bank
-accounts. Child PIN access remains disabled; the frontend never reads or writes PINs.
+guardian actions. The wallet amounts are simulated learning balances, not real
+bank accounts.
+
+To enable child sign-in, apply
+[`supabase/migrations/20261110000000_child_login.sql`](./supabase/migrations/20261110000000_child_login.sql)
+after the guardian banking and read-grants migrations. Guardians can create a
+username and 6-digit PIN with each new child profile, or set/reset them for an
+existing profile. The database stores only a bcrypt PIN hash. Child sessions
+expire after 12 hours and are held in the browser's session storage; child RPCs
+provide a limited dashboard with parent names, balances, and recent activity,
+and allow purchases and transfers between the child's two simulated wallets.
+Credits, bonuses, allowance management, and reversals remain guardian-only.
+Existing child email addresses are not currently used for PIN recovery; a
+guardian can reset the child's PIN from the guardian portal.
+Until the child-login migration is applied, the guardian portal keeps existing
+banking access available and shows that kid sign-in setup is pending.
+
+The GitHub Pages app does not apply database migrations automatically. Apply
+this migration in the Supabase SQL Editor before using child sign-in. Test with
+synthetic profiles first and confirm both guardian and child flows after the
+migration.
 
 To enable Supabase mode on GitHub Pages:
 

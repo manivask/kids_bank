@@ -52,6 +52,87 @@
                     <button class="btn-primary-action" id="cloud-auth-submit" type="submit">Sign In</button>
                 </form>
                 <button type="button" class="cloud-link-button" id="cloud-auth-toggle">Create a guardian account</button>
+                <button type="button" class="cloud-link-button" id="cloud-show-child-login">Kid sign in</button>
+            </section>
+
+            <section id="cloud-kid-auth-panel" class="auth-card-box cloud-card" hidden>
+                <h1 class="auth-card-title">Kid Sign In</h1>
+                <p class="cloud-help">Use the username and 6-digit PIN your parent or guardian gave you.</p>
+                <form id="cloud-kid-auth-form">
+                    <div class="form-group">
+                        <label class="form-label" for="cloud-kid-username">Username</label>
+                        <input class="form-input" id="cloud-kid-username" maxlength="24" autocomplete="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="cloud-kid-pin">6-digit PIN</label>
+                        <input class="form-input" id="cloud-kid-pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="current-password" required>
+                    </div>
+                    <p id="cloud-kid-auth-message" class="cloud-message" role="status" aria-live="polite"></p>
+                    <button class="btn-primary-action" id="cloud-kid-auth-submit" type="submit">Sign In</button>
+                </form>
+                <button type="button" class="cloud-link-button" id="cloud-show-guardian-login">Parent / Guardian sign in</button>
+            </section>
+
+            <section id="cloud-kid-panel" class="cloud-family cloud-kid-panel" hidden>
+                <div class="cloud-family-heading">
+                    <div>
+                        <h1 class="auth-card-title">Hi, <span id="cloud-kid-name"></span>!</h1>
+                        <p id="cloud-kid-school" class="cloud-help"></p>
+                        <p id="cloud-kid-parents" class="cloud-help" hidden></p>
+                    </div>
+                    <span id="cloud-kid-avatar" class="cloud-kid-avatar" aria-hidden="true"></span>
+                </div>
+                <p class="cloud-help">Here are your latest balances and family banking updates.</p>
+                <div class="cloud-balance-grid">
+                    <article class="cloud-balance-card cloud-wallet-card">
+                        <span>Wallet</span>
+                        <strong id="cloud-kid-checking-balance">$0.00</strong>
+                    </article>
+                    <article class="cloud-balance-card cloud-savings-card">
+                        <span>Piggy Bank</span>
+                        <strong id="cloud-kid-savings-balance">$0.00</strong>
+                    </article>
+                </div>
+                <p id="cloud-kid-message" class="cloud-message" role="status" aria-live="polite"></p>
+                <div class="cloud-banking-grid">
+                    <form id="cloud-kid-spend-form" class="cloud-action-card">
+                        <h3>Record a Purchase</h3>
+                        <label class="form-label" for="cloud-kid-spend-amount">Amount</label>
+                        <input class="form-input" id="cloud-kid-spend-amount" type="number" min="0.01" step="0.01" required>
+                        <label class="form-label" for="cloud-kid-spend-account">Pay from</label>
+                        <select class="form-select" id="cloud-kid-spend-account">
+                            <option value="checking">Wallet</option>
+                            <option value="savings">Piggy Bank</option>
+                        </select>
+                        <label class="form-label" for="cloud-kid-spend-title">What did you buy?</label>
+                        <input class="form-input" id="cloud-kid-spend-title" maxlength="100" required>
+                        <button class="btn-primary-action" type="submit">Record Purchase</button>
+                    </form>
+                    <form id="cloud-kid-transfer-form" class="cloud-action-card">
+                        <h3>Move Money</h3>
+                        <label class="form-label" for="cloud-kid-transfer-amount">Amount</label>
+                        <input class="form-input" id="cloud-kid-transfer-amount" type="number" min="0.01" step="0.01" required>
+                        <label class="form-label" for="cloud-kid-transfer-from">Move from</label>
+                        <select class="form-select" id="cloud-kid-transfer-from">
+                            <option value="checking">Wallet</option>
+                            <option value="savings">Piggy Bank</option>
+                        </select>
+                        <label class="form-label" for="cloud-kid-transfer-to">Move to</label>
+                        <select class="form-select" id="cloud-kid-transfer-to">
+                            <option value="savings">Piggy Bank</option>
+                            <option value="checking">Wallet</option>
+                        </select>
+                        <button class="btn-primary-action" type="submit">Transfer</button>
+                    </form>
+                </div>
+                <section class="cloud-activity">
+                    <div class="cloud-bank-heading">
+                        <h2>My Activity</h2>
+                        <button type="button" class="btn-secondary-action" id="cloud-kid-refresh">Refresh</button>
+                    </div>
+                    <div id="cloud-kid-transaction-list" class="cloud-transaction-list"></div>
+                </section>
+                <p class="cloud-notice">These are learning balances for Kids Bank, not real bank funds. Ask your parent or guardian if something doesn't look right.</p>
             </section>
 
             <section id="cloud-family-panel" class="cloud-family" hidden>
@@ -60,6 +141,7 @@
                         <h1 class="auth-card-title">Your Family</h1>
                         <p class="cloud-help">Signed in as <strong id="cloud-guardian-email"></strong></p>
                     </div>
+                    <button type="button" class="btn-secondary-action" id="cloud-family-kid-login">Switch to kid sign in</button>
                 </div>
                 <p id="cloud-family-message" class="cloud-message" role="status" aria-live="polite"></p>
                 <div id="cloud-child-list" class="cloud-child-list"></div>
@@ -71,6 +153,23 @@
                         </div>
                         <button type="button" class="btn-secondary-action" id="cloud-refresh-bank">Refresh</button>
                     </div>
+                    <form id="cloud-child-login-form" class="cloud-child-login-settings">
+                        <div>
+                            <h3>Kid Sign-In Details</h3>
+                            <p class="cloud-help">Set or reset this child's username and 6-digit PIN. Share them privately with your child.</p>
+                        </div>
+                        <div class="cloud-form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-login-username">Username</label>
+                                <input class="form-input" id="cloud-login-username" minlength="3" maxlength="24" pattern="[A-Za-z0-9][A-Za-z0-9._-]{2,23}" autocomplete="off" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cloud-login-pin">New 6-digit PIN</label>
+                                <input class="form-input" id="cloud-login-pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="new-password" required>
+                            </div>
+                        </div>
+                        <button class="btn-secondary-action" type="submit">Save Kid Sign-In</button>
+                    </form>
                     <div class="cloud-balance-grid">
                         <article class="cloud-balance-card cloud-wallet-card">
                             <span>Wallet</span>
@@ -211,12 +310,24 @@
                             <label class="form-label" for="cloud-child-email">Child's Email (Optional)</label>
                             <input class="form-input" id="cloud-child-email" type="email" autocomplete="off">
                         </div>
-                        <p class="cloud-help">A child PIN is not collected or stored. Child sign-in is not enabled yet.</p>
+                        <div id="cloud-new-kid-credentials">
+                            <div class="cloud-form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="cloud-new-kid-username">Kid Login Username *</label>
+                                    <input class="form-input" id="cloud-new-kid-username" minlength="3" maxlength="24" pattern="[A-Za-z0-9][A-Za-z0-9._-]{2,23}" autocomplete="off" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="cloud-new-kid-pin">Kid Login PIN (6 digits) *</label>
+                                    <input class="form-input" id="cloud-new-kid-pin" type="password" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="new-password" required>
+                                </div>
+                            </div>
+                            <p class="cloud-help">The PIN is sent directly to Supabase to be bcrypt-hashed. It is never stored in the browser or returned to the app.</p>
+                        </div>
                         <p id="cloud-child-error" class="cloud-message cloud-error" role="alert"></p>
                         <button class="btn-primary-action" id="cloud-child-submit" type="submit">Create Child Profile</button>
                     </form>
                 </details>
-                <p class="cloud-notice">Balances in this learning app are simulated, not connected to a bank. Guardians can manage child profiles, record purchases, transfer funds between app wallets, issue credits or bonuses, and pay configured allowances. Child PIN sign-in is not enabled.</p>
+                <p class="cloud-notice">Balances in this learning app are simulated, not connected to a bank. Guardians manage child profiles, kid sign-in credentials, credits, bonuses, and allowances. Kids can sign in to view balances and activity, record purchases, and move funds between their app wallets.</p>
             </section>
         </div>
     </main>

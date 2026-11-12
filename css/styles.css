@@ -1800,6 +1800,24 @@ html[data-app-mode="supabase"] .app-viewport {
     margin-top: 1.5rem;
 }
 
+.cloud-child-login-settings {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1rem 0 1.5rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color, #dbe3ee);
+    border-radius: 12px;
+    background: var(--surface-muted, #f8fafc);
+}
+
+.cloud-child-login-settings h3 {
+    margin: 0;
+}
+
+.cloud-kid-avatar {
+    font-size: 2rem;
+}
+
 .cloud-transaction-list {
     display: grid;
     gap: 0.65rem;

@@ -106,3 +106,78 @@ test('surfaces Supabase operation failures', async () => {
         /Insufficient funds/
     );
 });
+
+test('child sign-in validates credentials and sends them to the scoped login RPC', async () => {
+    const calls = [];
+    const api = createBankingApi({
+        async rpc(name, args) {
+            calls.push({ name, args });
+            return {
+                data: { ok: true, session_token: 'session-token', expires_at: 'later' },
+                error: null
+            };
+        }
+    });
+
+    const result = await api.signInChild('Maya.Kid', '123456');
+    assert.equal(result.session_token, 'session-token');
+    assert.deepEqual(calls[0], {
+        name: 'kids_bank_child_sign_in',
+        args: { p_username: 'maya.kid', p_pin: '123456' }
+    });
+    await assert.rejects(api.signInChild('x', '1234'), /valid username/);
+    await assert.rejects(api.signInChild('maya', 'abc123'), /exactly 6 digits/);
+    assert.equal(calls.length, 1);
+});
+
+test('child dashboard, sign-out, credential setup, spending, and transfers use child-scoped RPCs', async () => {
+    const calls = [];
+    const api = createBankingApi({
+        async rpc(name, args) {
+            calls.push({ name, args });
+            if (name === 'kids_bank_child_dashboard') {
+                return { data: { child: { id: 'child-1' }, transactions: [] }, error: null };
+            }
+            return { data: 'transaction-id', error: null };
+        }
+    }, () => 'child-request');
+
+    await api.childDashboard('session-token');
+    await api.childSignOut('session-token');
+    await api.setChildLogin('child-1', 'maya.kid', '654321');
+    await api.childSpend('session-token', {
+        amount: 2,
+        account: 'checking',
+        title: 'Book',
+        requestId: 'spend-request'
+    });
+    await api.childTransfer('session-token', {
+        amount: 3,
+        fromAccount: 'checking',
+        toAccount: 'savings',
+        requestId: 'transfer-request'
+    });
+
+    assert.deepEqual(calls.map(({ name }) => name), [
+        'kids_bank_child_dashboard',
+        'kids_bank_child_sign_out',
+        'kids_bank_set_child_login',
+        'kids_bank_child_transaction',
+        'kids_bank_child_transaction'
+    ]);
+    assert.equal(calls[2].args.p_pin, '654321');
+    assert.equal(calls[3].args.p_operation, 'spend');
+    assert.equal(calls[3].args.p_request_id, 'spend-request');
+    assert.equal(calls[4].args.p_operation, 'transfer');
+    assert.equal(calls[4].args.p_from_account, 'checking');
+    assert.equal(calls[4].args.p_to_account, 'savings');
+    await assert.rejects(
+        api.childTransfer('session-token', {
+            amount: 1,
+            fromAccount: 'checking',
+            toAccount: 'checking'
+        }),
+        /different source and destination/
+    );
+    assert.equal(calls.length, 5);
+});
