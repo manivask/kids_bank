@@ -100,6 +100,13 @@ updates balances in the same database transaction. An idempotency key protects
 against accidental duplicate submissions. Allowances are paid manually; there is
 no automatic scheduler.
 
+If that migration was already applied and the portal reports "permission denied
+for table children", apply
+[`supabase/migrations/20261109000000_restore_guardian_banking_reads.sql`](./supabase/migrations/20261109000000_restore_guardian_banking_reads.sql).
+It restores only the authenticated guardian's RLS-scoped read access to required
+child and transaction columns, while keeping all direct writes revoked and the
+legacy child PIN inaccessible.
+
 The connected portal displays child balances and recent activity and provides
 guardian actions. The wallet amounts are simulated learning balances, not real bank
 accounts. Child PIN access remains disabled; the frontend never reads or writes PINs.
